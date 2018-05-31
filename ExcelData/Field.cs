@@ -32,21 +32,26 @@ namespace TK.ExcelData
 
         }
 
-        public Field(string name,ExcelDataType type):this(name,type,"")
+        public Field(string name,ExcelDataType type)
         {
-
+            m_Name = name;
+            m_Type = type;
         }
 
-        public Field(string name, ExcelDataType type,string extType):this(name,type,extType,"")
+        public Field(string name, ExcelDataType type,string extType)
         {
+            m_Name = name;
+            m_Type = type;
+            m_ExtType = extType;
         }
 
-        public Field(string name, ExcelDataType type, string extType,string comment)
+        public Field(string name, ExcelDataType type, string extType,string comment,string description)
         {
             m_Name = name;
             m_Type = type;
             m_ExtType = extType;
             m_Comment = comment;
+            m_Description = description;
         }
 
         public static ExcelDataType Parse(string type)
@@ -189,6 +194,18 @@ namespace TK.ExcelData
             get
             {
                 return m_ExtTypeKeyField;
+            }
+        }
+
+        public string description
+        {
+            get
+            {
+                return m_Description;
+            }
+            set
+            {
+                m_Description = value;
             }
         }
     }

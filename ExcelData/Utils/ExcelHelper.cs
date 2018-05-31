@@ -57,7 +57,7 @@ namespace TK.ExcelData
 
         public static bool IsTableSheet(ISheet sheet)
         {
-            return sheet.SheetName.IndexOf("@") != 0;
+            return sheet.SheetName.IndexOf("__") != 0;
         }
     }
 }

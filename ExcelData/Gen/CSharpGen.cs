@@ -5,13 +5,13 @@ namespace TK.ExcelData
 {
     public class CSharpGen:CodeGen
     {
-        static string TemplateFile = "CodeGen/CodeDataTemplate.ts";
+        static string TemplateFile = "ExcelData/Gen/CodeDataTemplate.ts";
 
-        public override void Init()
+        public override void Init(string templateFilePath)
         {
-            base.Init();
+            base.Init(templateFilePath);
 
-            m_TemplateContent= System.IO.File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory() + TemplateFile));
+            m_TemplateContent= System.IO.File.ReadAllText(templateFilePath);
         }
 
         public override void Generate(Schema schema,string outputPath)

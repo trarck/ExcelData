@@ -34,6 +34,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\NPOI\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\NPOI\NPOI.dll</HintPath>
@@ -60,25 +64,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeGen\CodeGen.cs" />
-    <Compile Include="CodeGen\CodeGenWindow.cs" />
-    <Compile Include="Convert\ConvertToJson.cs" />
-    <Compile Include="Convert\ConvertToLocalization.cs" />
+    <Compile Include="Gen\CSharpGen.cs" />
+    <Compile Include="Gen\DataGen.cs" />
+    <Compile Include="Gen\JsonDataGen.cs" />
+    <Compile Include="Gen\CodeGen.cs" />
     <Compile Include="Define.cs" />
     <Compile Include="EDExtensionMethods.cs" />
-    <Compile Include="ExcelHelper.cs" />
+    <Compile Include="Utils\ExcelHelper.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reader\EDDataReader.cs" />
-    <Compile Include="Reader\EDLinkDataReader.cs" />
-    <Compile Include="Reader\EDReader.cs" />
-    <Compile Include="Reader\EDReadHelper.cs" />
-    <Compile Include="Reader\EDSchemaReader.cs" />
+    <Compile Include="Reader\DataReader.cs" />
+    <Compile Include="Reader\LinkDataReader.cs" />
+    <Compile Include="Reader\Reader.cs" />
+    <Compile Include="Reader\ReadHelper.cs" />
+    <Compile Include="Reader\SchemaReader.cs" />
     <Compile Include="Schema.cs" />
     <Compile Include="Utils\EnumUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CodeGen\CodeDataTemplate.ts" />
+    <Content Include="Gen\CodeDataTemplate.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

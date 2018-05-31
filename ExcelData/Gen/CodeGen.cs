@@ -10,9 +10,11 @@ namespace TK.ExcelData
         protected string m_Ns;
         protected string m_TemplateContent;
 
-        public virtual void Init()
-        {
+        protected string m_TemplateFilePath;
 
+        public virtual void Init(string templateFilePath)
+        {
+            m_TemplateFilePath = templateFilePath;
         }
 
         public virtual void Generate(Schema schema,string outputPath)
@@ -22,6 +24,11 @@ namespace TK.ExcelData
 
         public virtual string CreateClass(Schema schema)
         {
+            if (string.IsNullOrEmpty(m_TemplateContent))
+            {
+                return null;
+            }
+
             string content = m_TemplateContent;
             content = content.Replace("{CLASS}", schema.name);
             content = content.Replace("{PROPERTIES}", CreateProperties(schema));
@@ -111,6 +118,18 @@ namespace TK.ExcelData
             set
             {
                 m_TemplateContent = value;
+            }
+        }
+
+        public string templateFilePath
+        {
+            get
+            {
+                return m_TemplateFilePath;
+            }
+            set
+            {
+                m_TemplateFilePath = value;
             }
         }
     }

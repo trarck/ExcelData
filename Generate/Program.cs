@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using NPOI.SS.UserModel;
 using TK.ExcelData;
 
@@ -28,9 +29,12 @@ namespace Generate
                 excelFile = args[0];
                 outPath = args[1];
             }
+
+            string workPath = System.IO.Directory.GetCurrentDirectory();
+            GenWorkbook(Path.Combine(workPath,excelFile), Path.Combine(workPath,outPath));
         }
 
-        void GenWorkbook(string excelFile,string savePath)
+        static void GenWorkbook(string excelFile,string savePath)
         {
             IWorkbook workbook = ExcelHelper.Load(excelFile);
 
@@ -44,24 +48,27 @@ namespace Generate
             }
         }
 
-        void GenSheet(ISheet sheet, string savePath, string schemaName,string genNamespace="")
+        static void GenSheet(ISheet sheet, string savePath, string schemaName,string genNamespace="")
         {
             Schema schema = SchemaReader.ReadSchema(sheet);
             schema.name = schemaName;
 
             GenClass(schema, savePath, genNamespace);
+
+            GenData(sheet, schema, savePath);
         }
 
-        void GenClass(Schema schema, string savePath, string genNamespace = "")
+        static void GenClass(Schema schema, string savePath, string genNamespace = "")
         {
             CodeGen gen = new CSharpGen();
+            gen.Init(Path.Combine(Directory.GetCurrentDirectory(),"ExcelData/Gen/CodeDataTemplate.ts"));
 
             gen.ns = genNamespace;
             gen.Generate(schema, savePath);
         }
 
 
-        void GenData(ISheet sheet,Schema schema, string savePath)
+        static void GenData(ISheet sheet,Schema schema, string savePath)
         {
             DataGen gen = new JsonDataGen();
 
