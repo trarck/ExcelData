@@ -5,6 +5,9 @@ namespace TK.ExcelData
 {
     public class CSharpGen:CodeGen
     {
+        /// <summary>
+        /// 
+        /// </summary>
         static string TemplateFile = "ExcelData/Gen/CodeDataTemplate.ts";
 
         public override void Init(string templateFilePath)
@@ -14,16 +17,16 @@ namespace TK.ExcelData
             m_TemplateContent= System.IO.File.ReadAllText(templateFilePath);
         }
 
-        public override void Generate(Schema schema,string outputPath)
+        public override void Generate(Schema schema,string outPath)
         {
             string content = CreateClass(schema);
 
             //check path is exists
-            if (!Directory.Exists(outputPath))
+            if (!Directory.Exists(outPath))
             {
-                Directory.CreateDirectory(outputPath);
+                Directory.CreateDirectory(outPath);
             }
-            string codeFile = Path.Combine(outputPath , schema.name + ".cs");
+            string codeFile = Path.Combine(outPath, schema.name + m_GenExt);
             File.WriteAllText(codeFile, content);
         }
 
@@ -64,54 +67,54 @@ namespace TK.ExcelData
 
             return typeDefine;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         protected override string CreateProperty(Field field)
         {
             string pad = Pad(m_PropertyPad);
 
             string comment = "";
-            if (field.comment != "")
+
+            if (!string.IsNullOrEmpty(field.description))
             {
-                comment = pad + "/*" + field.comment + "*/"+ m_CRLF;
+                comment = field.description;
             }
+
+            if (!string.IsNullOrEmpty(field.comment))
+            {
+                if (string.IsNullOrEmpty(comment))
+                {
+                    comment = field.comment;
+                }
+                else
+                {
+                    comment += m_CRLF + field.comment;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(comment))
+            {
+                comment = pad + "/// <summary>" + m_CRLF
+                        + ParseLines(comment, pad)
+                        + pad + "/// </summary>"+m_CRLF;
+            }
+
             return comment
                 + pad+"public " + GetFieldTypeDefine(field) + " " + field.name+";"+ m_CRLF;
         }
 
-        public static string Pad(int num)
+        protected string ParseLines(string str,string pad)
         {
-            string p = "";
-            for(int i = 0; i < num; ++i)
+            string[] lines = str.Replace("\r\n", "\n").Split('\n');
+            string ret = "";
+            for(int i = 0; i < lines.Length; ++i)
             {
-                p += " ";
+                ret += pad + "/// " + lines[i] + m_CRLF;
             }
-
-            return p;
-        }
-
-        public string ns
-        {
-            set
-            {
-                m_Ns = value;
-            }
-
-            get
-            {
-                return m_Ns;
-            }
-        }
-
-        public string templateContent
-        {
-            get
-            {
-                return m_TemplateContent;
-            }
-            set
-            {
-                m_TemplateContent = value;
-            }
+            return ret;
         }
     }
 }

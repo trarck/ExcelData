@@ -12,12 +12,14 @@ namespace TK.ExcelData
 
         protected string m_TemplateFilePath;
 
+        protected string m_GenExt =".cs";
+
         public virtual void Init(string templateFilePath)
         {
             m_TemplateFilePath = templateFilePath;
         }
 
-        public virtual void Generate(Schema schema,string outputPath)
+        public virtual void Generate(Schema schema,string outPath)
         {
 
         }

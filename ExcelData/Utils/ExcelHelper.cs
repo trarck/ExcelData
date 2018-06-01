@@ -55,9 +55,24 @@ namespace TK.ExcelData
             fs.Close();
         }
 
-        public static bool IsTableSheet(ISheet sheet)
+        public static bool NeedExport(ISheet sheet)
         {
             return sheet.SheetName.IndexOf("__") != 0;
+        }
+
+        public static string GetExportName(ISheet sheet)
+        {
+            string name = null;
+            int pos = sheet.SheetName.IndexOf("|");
+            if (pos > -1)
+            {
+                name = sheet.SheetName.Substring(0,pos);
+            }
+            else
+            {
+                name = sheet.SheetName;
+            }
+            return name;
         }
     }
 }

@@ -16,8 +16,12 @@ namespace TK.ExcelData
         {
             object list = DataReader.ReadList(sheet, schema);
 
-            string tableName = sheet.SheetName;
-            string filename = Path.Combine(outPath, (string.IsNullOrEmpty(tableName) ? schema.name : tableName) + ".json");
+            string tableName = schema.name;
+            if (!Directory.Exists(outPath))
+            {
+                Directory.CreateDirectory(outPath);
+            }
+            string filename = Path.Combine(outPath, tableName + m_ExportExt);
             SaveToJsonFile(filename, list);
         }
 

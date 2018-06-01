@@ -14,48 +14,64 @@ namespace Generate
         static void Main(string[] args)
         {
             string excelFile=null;
-            string outPath=null;
-            if (args.Length < 1)
+            string classOutPath=null;
+            string dataOutPath = null;
+
+            if (args.Length == 0)
             {
                 Console.WriteLine("cmd excelFile outPath");
             }
-            else if (args.Length < 2)
+            else if (args.Length == 1)
             {
                 excelFile = args[0];
-                outPath = System.IO.Directory.GetCurrentDirectory();
+                classOutPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Class");
+                dataOutPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Data");
+            }
+            else if (args.Length == 2)
+            {
+                excelFile = args[0];
+                classOutPath = Path.Combine(args[1], "Class");
+                dataOutPath = Path.Combine(args[1], "Data");
             }
             else
             {
                 excelFile = args[0];
-                outPath = args[1];
+                classOutPath = args[1];
+                dataOutPath = args[2];
             }
 
             string workPath = System.IO.Directory.GetCurrentDirectory();
-            GenWorkbook(Path.Combine(workPath,excelFile), Path.Combine(workPath,outPath));
+            GenWorkbook(Path.Combine(workPath,excelFile), Path.Combine(workPath,classOutPath),Path.Combine(workPath, dataOutPath));
         }
 
-        static void GenWorkbook(string excelFile,string savePath)
+        static void GenWorkbook(string excelFile,string classOutPath,string dataOutPath)
         {
             IWorkbook workbook = ExcelHelper.Load(excelFile);
-
-            for (int i = 0; i < workbook.NumberOfSheets; ++i)
+            if (workbook != null)
             {
-                ISheet sheet = workbook.GetSheetAt(i);
-                if (ExcelHelper.IsTableSheet(sheet))
+                for (int i = 0; i < workbook.NumberOfSheets; ++i)
                 {
-                    GenSheet(sheet,savePath,sheet.SheetName);
+                    ISheet sheet = workbook.GetSheetAt(i);
+                    if (ExcelHelper.NeedExport(sheet))
+                    {
+                        GenSheet(sheet, classOutPath, dataOutPath,ExcelHelper.GetExportName(sheet));
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("Open " + excelFile + " fail");
             }
         }
 
-        static void GenSheet(ISheet sheet, string savePath, string schemaName,string genNamespace="")
+        static void GenSheet(ISheet sheet, string classOutPath,string dataOutPath, string schemaName,string genNamespace="")
         {
             Schema schema = SchemaReader.ReadSchema(sheet);
             schema.name = schemaName;
 
-            GenClass(schema, savePath, genNamespace);
+            GenClass(schema, classOutPath, genNamespace);
 
-            GenData(sheet, schema, savePath);
+            GenData(sheet, schema, dataOutPath);
         }
 
         static void GenClass(Schema schema, string savePath, string genNamespace = "")

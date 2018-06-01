@@ -6,6 +6,8 @@ namespace TK.ExcelData
 {
     public abstract class DataGen
     {
+        protected string m_ExportExt=".json";
+
         public virtual void Init()
         {
 
