@@ -88,6 +88,57 @@ namespace TK.ExcelData
             return null;
         }
 
+        string CamelCase(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                char[] chars = str.ToCharArray();
+                int l = chars.Length;
+                int j = 0;
+                int i = 0;
+                //check first char
+                char c = chars[i];
+                if (c >= 'a' && c <= 'z')
+                {
+                    chars[i] = char.ToUpper(c);
+                }
+                else if (c == '_')
+                {
+                    ++i;
+                }
+
+                for (; i < l; ++i, ++j)
+                {
+                    if (chars[i] == '_')
+                    {
+                        if (i + 1 < chars.Length)
+                        {
+                            c = chars[i + 1];
+
+                            if (c >= 'a' && c <= 'z')
+                            {
+                                chars[i + 1] = char.ToUpper(c);
+                            }
+
+                            if (c != '_')
+                            {
+                                ++i;
+                            }
+                        }
+                    }
+
+                    if (j != i)
+                    {
+                        chars[j] = chars[i];
+                    }
+                }
+
+
+                str = new string(chars, 0, j);
+            }
+            return str;
+        }
+
         public string name
         {
             set
@@ -111,6 +162,19 @@ namespace TK.ExcelData
             get
             {
                 return m_Fields;
+            }
+        }
+
+        public string className
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(m_Name))
+                {
+                    return CamelCase(m_Name);
+                }
+
+                return m_Name;
             }
         }
     }

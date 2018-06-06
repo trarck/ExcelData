@@ -32,7 +32,7 @@ namespace TK.ExcelData
             }
 
             string content = m_TemplateContent;
-            content = content.Replace("{CLASS}", schema.name);
+            content = content.Replace("{CLASS}", schema.className);
             content = content.Replace("{PROPERTIES}", CreateProperties(schema));
             if (string.IsNullOrEmpty(m_Ns))
             {

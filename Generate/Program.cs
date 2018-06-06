@@ -11,10 +11,12 @@ namespace Generate
 {
     class Program
     {
+       
         static void Main(string[] args)
         {
-            string excelFile=null;
-            string classOutPath=null;
+
+            string excelFile = null;
+            string classOutPath = null;
             string dataOutPath = null;
 
             if (args.Length == 0)
@@ -41,7 +43,7 @@ namespace Generate
             }
 
             string workPath = System.IO.Directory.GetCurrentDirectory();
-            GenWorkbook(Path.Combine(workPath,excelFile), Path.Combine(workPath,classOutPath),Path.Combine(workPath, dataOutPath));
+            GenWorkbook(Path.Combine(workPath, excelFile), Path.Combine(workPath, classOutPath), Path.Combine(workPath, dataOutPath));
         }
 
         static void GenWorkbook(string excelFile,string classOutPath,string dataOutPath)

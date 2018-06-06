@@ -26,7 +26,7 @@ namespace TK.ExcelData
             {
                 Directory.CreateDirectory(outPath);
             }
-            string codeFile = Path.Combine(outPath, schema.name + m_GenExt);
+            string codeFile = Path.Combine(outPath, schema.className + m_GenExt);
             File.WriteAllText(codeFile, content);
         }
 
