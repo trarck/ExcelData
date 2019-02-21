@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Gen\CSharpGen.cs" />
     <Compile Include="Gen\DataGen.cs" />
+    <Compile Include="Gen\XmlDataGen.cs" />
     <Compile Include="Gen\JsonDataGen.cs" />
     <Compile Include="Gen\CodeGen.cs" />
     <Compile Include="Define.cs" />
@@ -80,9 +81,6 @@
     <Compile Include="Reader\SchemaReader.cs" />
     <Compile Include="Schema.cs" />
     <Compile Include="Utils\EnumUtil.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Gen\CodeDataTemplate.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

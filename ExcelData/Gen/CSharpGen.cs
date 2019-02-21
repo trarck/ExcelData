@@ -8,7 +8,7 @@ namespace TK.ExcelData
         /// <summary>
         /// 
         /// </summary>
-        static string TemplateFile = "ExcelData/Gen/CodeDataTemplate.ts";
+        static string TemplateFile = "ExcelData/Gen/Templates/CSharpClass.ts";
 
         public override void Init(string templateFilePath)
         {
@@ -103,7 +103,7 @@ namespace TK.ExcelData
             }
 
             return comment
-                + pad+"public " + GetFieldTypeDefine(field) + " " + field.name+";"+ m_CRLF;
+                + pad+"public " + GetFieldTypeDefine(field) + " " + field.name+" { get;set;}"+ m_CRLF;
         }
 
         protected string ParseLines(string str,string pad)

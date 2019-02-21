@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using NPOI.SS.UserModel;
 using TK.ExcelData;
@@ -71,26 +67,33 @@ namespace Generate
             Schema schema = SchemaReader.ReadSchema(sheet);
             schema.name = schemaName;
 
-            GenClass(schema, classOutPath, genNamespace);
+            GenCSharpClass(schema, classOutPath, genNamespace);
 
-            GenData(sheet, schema, dataOutPath);
+            GenJsonData(sheet, schema, dataOutPath);
         }
 
-        static void GenClass(Schema schema, string savePath, string genNamespace = "")
+        static void GenCSharpClass(Schema schema, string savePath, string genNamespace = "")
         {
             CodeGen gen = new CSharpGen();
-            gen.Init(Path.Combine(Directory.GetCurrentDirectory(),"ExcelData/Gen/CodeDataTemplate.ts"));
+            gen.Init(Path.Combine(Directory.GetCurrentDirectory(),"ExcelData/Gen/Templates/CSharpClass.ts"));
 
             gen.ns = genNamespace;
             gen.Generate(schema, savePath);
         }
 
 
-        static void GenData(ISheet sheet,Schema schema, string savePath)
+        static void GenJsonData(ISheet sheet,Schema schema, string savePath)
         {
             DataGen gen = new JsonDataGen();
 
             gen.Generate(sheet,schema, savePath);
+        }
+
+        static void GenXmlData(ISheet sheet, Schema schema, string savePath)
+        {
+            DataGen gen = new XmlDataGen();
+
+            gen.Generate(sheet, schema, savePath);
         }
     }
 }
