@@ -35,5 +35,23 @@ namespace ExcelData.DataSerializer
 
             return value;
         }
+
+        public static Type[] PrimitiveTypes = new Type[] { typeof(char),typeof(string),
+            typeof(short), typeof(ushort),
+            typeof(byte),  typeof(sbyte),
+            typeof(int), typeof(uint),
+            typeof(long), typeof(ulong),
+            typeof(float),  typeof(double),  typeof(decimal),  typeof(bool), typeof(TimeSpan), typeof(DateTime), typeof(DateTimeOffset), typeof(Uri), typeof(Guid),  typeof(Type)};
+        public static bool isPrimitive(Type type)
+        {
+            for (int i = 0, l = PrimitiveTypes.Length; i < l; ++i)
+            {
+                if (PrimitiveTypes[i] == type)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

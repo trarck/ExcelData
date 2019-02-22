@@ -43,7 +43,7 @@ namespace ExcelData.DataSerializer
         private static CollectionTypeDescription GetDescription(Type collectionType)
         {
             var itemType = collectionType.GetGenericArguments()[0];
-            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateList(items, itemType));
+            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateList(items, itemType), null, itemType.Name);
         }
     }
 }

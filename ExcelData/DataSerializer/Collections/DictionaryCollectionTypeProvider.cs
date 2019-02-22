@@ -9,6 +9,9 @@ namespace ExcelData.DataSerializer
     /// </summary>
     public class DictionaryCollectionTypeProvider : ICollectionTypeProvider
     {
+        private static string defaultElementName = "Dict";
+        private static string defaultItemName = "KeyPair";
+
         private static readonly HashSet<Type> dictionaryTypes = new HashSet<Type>
             {
                 typeof(IDictionary<,>), 
@@ -40,7 +43,7 @@ namespace ExcelData.DataSerializer
         {
             var genericArguments = dictionaryType.GetGenericArguments();
             var itemType = typeof(KeyValuePair<,>).MakeGenericType(genericArguments);
-            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateDictionary(items, genericArguments[0], genericArguments[1]));
+            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateDictionary(items, genericArguments[0], genericArguments[1]), defaultElementName, defaultItemName);
         }
     }
 }
