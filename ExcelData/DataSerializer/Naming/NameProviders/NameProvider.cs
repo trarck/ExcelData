@@ -27,7 +27,7 @@ namespace ExcelData.DataSerializer
             this.collectionItemName = collectionItemName;
         }
 
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type,object obj)
         {
             var elementName = type.Name;
             var itemName = string.Empty;
@@ -49,7 +49,7 @@ namespace ExcelData.DataSerializer
             return new NodeName(elementName, itemName);
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo,object obj)
         {
             var elementName = propertyInfo.Name;
             var itemName = string.Empty;

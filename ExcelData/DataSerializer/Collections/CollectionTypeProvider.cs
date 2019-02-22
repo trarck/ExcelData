@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using SimpleXmlSerializer.Utils;
 
 namespace ExcelData.DataSerializer
 {
@@ -44,7 +43,7 @@ namespace ExcelData.DataSerializer
         private static CollectionTypeDescription GetDescription(Type collectionType)
         {
             var itemType = collectionType.GetGenericArguments()[0];
-            return new CollectionTypeDescription(itemType, items => FactoryUtils.CreateList(items, itemType));
+            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateList(items, itemType));
         }
     }
 }

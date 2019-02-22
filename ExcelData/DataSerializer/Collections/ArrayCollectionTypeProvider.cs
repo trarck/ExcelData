@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using SimpleXmlSerializer.Utils;
 
 namespace ExcelData.DataSerializer
 {
@@ -14,7 +13,7 @@ namespace ExcelData.DataSerializer
             if (type.IsArray)
             {
                 var itemType = type.GetElementType();
-                description = new CollectionTypeDescription(itemType, items => FactoryUtils.CreateArray(items, itemType));
+                description = new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateArray(items, itemType));
                 return true;
             }
 

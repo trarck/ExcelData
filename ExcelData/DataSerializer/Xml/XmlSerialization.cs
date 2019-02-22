@@ -35,10 +35,6 @@ namespace ExcelData.DataSerializer
             else
             {
                 Type type = value.GetType();
-                switch (type)
-                {
-                    case Int32:
-                }
             }
         }
 

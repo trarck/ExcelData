@@ -10,7 +10,7 @@ namespace ExcelData.DataSerializer
     /// </summary>
     public class XmlAttributesNameProvider : INameProvider
     {
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type, object obj)
         {
             var xmlRootAttr = type.FindAttribute<XmlRootAttribute>();
             if (xmlRootAttr != null)
@@ -21,7 +21,7 @@ namespace ExcelData.DataSerializer
             return NodeName.Empty;
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo, object obj)
         {
             var elementName = string.Empty;
             var attributeName = string.Empty;

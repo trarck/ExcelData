@@ -10,7 +10,7 @@ namespace ExcelData.DataSerializer
     /// </summary>
     public class DataAttributesNameProvider : INameProvider
     {
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type,object obj)
         {
             var collAttr = type.FindAttribute<CollectionDataContractAttribute>();
             if (collAttr != null)
@@ -27,7 +27,7 @@ namespace ExcelData.DataSerializer
             return NodeName.Empty;
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo,object obj)
         {
             var attr = propertyInfo.FindAttribute<DataMemberAttribute>();
             var collAttr = propertyInfo.PropertyType.FindAttribute<CollectionDataContractAttribute>();

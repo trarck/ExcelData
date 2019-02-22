@@ -22,26 +22,26 @@ namespace ExcelData.DataSerializer
             this.provider = provider;
         }
 
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type, object obj)
         {
             if (cacheByType.ContainsKey(type))
             {
                 return cacheByType[type];
             }
 
-            var nodeName = provider.GetNodeName(type);
+            var nodeName = provider.GetNodeName(type,obj);
             cacheByType[type] = nodeName;
             return nodeName;
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo, object obj)
         {
             if (cacheByPropertyInfo.ContainsKey(propertyInfo))
             {
                 return cacheByPropertyInfo[propertyInfo];
             }
 
-            var nodeName = provider.GetNodeName(propertyInfo);
+            var nodeName = provider.GetNodeName(propertyInfo,obj);
             cacheByPropertyInfo[propertyInfo] = nodeName;
             return nodeName;
         }

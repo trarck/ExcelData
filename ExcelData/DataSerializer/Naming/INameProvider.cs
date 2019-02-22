@@ -11,11 +11,11 @@ namespace ExcelData.DataSerializer
         /// <summary>
         /// Provides name based on information about <see cref="PropertyInfo"/>.
         /// </summary>
-        NodeName GetNodeName(PropertyInfo propertyInfo);
+        NodeName GetNodeName(PropertyInfo propertyInfo,object obj);
 
         /// <summary>
         /// Provides name based on information about <see cref="Type"/>.
         /// </summary>
-        NodeName GetNodeName(Type type);
+        NodeName GetNodeName(Type type,object obj);
     }
 }

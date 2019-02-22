@@ -85,14 +85,14 @@ namespace ExcelData.DataSerializer
             return (INode)node.Clone();
         }
 
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type, object obj=null)
         {
-            return settings.NameProvider.GetNodeName(type);
+            return settings.NameProvider.GetNodeName(type,obj);
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo, object obj=null)
         {
-            return settings.NameProvider.GetNodeName(propertyInfo);
+            return settings.NameProvider.GetNodeName(propertyInfo,obj);
         }
 
         public IDictionary<NodeName, PropertyInfo> GetNodeNames(IEnumerable<PropertyInfo> properties)

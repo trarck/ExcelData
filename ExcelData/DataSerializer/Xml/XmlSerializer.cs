@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExcelData.DataSerializer
 {
@@ -13,7 +10,6 @@ namespace ExcelData.DataSerializer
 
         public XmlSerializer()
         {
-            m_Settings = new SerializerSettings();
         }
 
         public XmlSerializer(SerializerSettings settings)

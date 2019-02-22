@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using SimpleXmlSerializer.Utils;
 
 namespace ExcelData.DataSerializer
 {
@@ -41,7 +40,7 @@ namespace ExcelData.DataSerializer
         {
             var genericArguments = dictionaryType.GetGenericArguments();
             var itemType = typeof(KeyValuePair<,>).MakeGenericType(genericArguments);
-            return new CollectionTypeDescription(itemType, items => FactoryUtils.CreateDictionary(items, genericArguments[0], genericArguments[1]));
+            return new CollectionTypeDescription(itemType, items => FeflectionUtils.CreateDictionary(items, genericArguments[0], genericArguments[1]));
         }
     }
 }

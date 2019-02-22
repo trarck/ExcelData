@@ -29,7 +29,7 @@ namespace ExcelData.DataSerializer
             };
 
             description = new CompositeTypeDescription(properties, ps => CreateObject(ctorFunc, ps), (obj, pi) => {
-                return pi.GetValue(obj);
+                return pi.GetValue(obj,null);
             });
             return true;
         }

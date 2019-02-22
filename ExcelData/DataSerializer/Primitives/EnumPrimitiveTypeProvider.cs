@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using SimpleXmlSerializer.Core.Serializers;
+using ExcelData.DataSerializer.Serializers;
 
 namespace ExcelData.DataSerializer
 {

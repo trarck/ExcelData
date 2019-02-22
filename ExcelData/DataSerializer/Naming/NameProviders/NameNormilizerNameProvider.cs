@@ -23,23 +23,23 @@ namespace ExcelData.DataSerializer
             this.nameNormalizer = nameNormalizer;
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo,object obj)
         {
-            var nodeName = provider.GetNodeName(propertyInfo);
+            var nodeName = provider.GetNodeName(propertyInfo,obj);
             return NormalizeName(nodeName);
         }
 
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type,object obj)
         {
-            var nodeName = provider.GetNodeName(type);
+            var nodeName = provider.GetNodeName(type,obj);
             return NormalizeName(nodeName);
         }
 
         private NodeName NormalizeName(NodeName nodeName)
         {
-            var elementName = nodeName.HasElementName ? nameNormalizer.NormalizeName(nodeName.ElementName.Name) : null;
-            var itemName = nodeName.HastItemName ? nameNormalizer.NormalizeName(nodeName.ItemName.Name) : null;
-            var attributeName = nodeName.HasAttributeName ? nameNormalizer.NormalizeName(nodeName.AttributeName.Name) : null;
+            var elementName = nodeName.HasElementName ? nameNormalizer.NormalizeName(nodeName.ElementName) : null;
+            var itemName = nodeName.HastItemName ? nameNormalizer.NormalizeName(nodeName.ItemName) : null;
+            var attributeName = nodeName.HasAttributeName ? nameNormalizer.NormalizeName(nodeName.AttributeName) : null;
 
             return new NodeName(elementName, itemName, attributeName);
         }

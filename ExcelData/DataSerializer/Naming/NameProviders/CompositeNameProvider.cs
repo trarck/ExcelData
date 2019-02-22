@@ -21,23 +21,23 @@ namespace ExcelData.DataSerializer
             this.providers = providers;
         }
 
-        public NodeName GetNodeName(Type type)
+        public NodeName GetNodeName(Type type, object obj)
         {
             var nodeName = NodeName.Empty;
             foreach (var provider in providers)
             {
-                nodeName = Merge(nodeName, provider.GetNodeName(type));
+                nodeName = Merge(nodeName, provider.GetNodeName(type,obj));
             }
 
             return nodeName;
         }
 
-        public NodeName GetNodeName(PropertyInfo propertyInfo)
+        public NodeName GetNodeName(PropertyInfo propertyInfo, object obj)
         {
             var nodeName = NodeName.Empty;
             foreach (var provider in providers)
             {
-                nodeName = Merge(nodeName, provider.GetNodeName(propertyInfo));
+                nodeName = Merge(nodeName, provider.GetNodeName(propertyInfo,obj));
             }
 
             return nodeName;

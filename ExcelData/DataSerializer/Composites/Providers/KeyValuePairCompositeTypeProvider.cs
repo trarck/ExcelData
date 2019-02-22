@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace ExcelData.DataSerializer
@@ -20,9 +19,9 @@ namespace ExcelData.DataSerializer
                 var ctor = type.GetConstructor(genericArguments);
 
                 var properties = propertiesProvider.GetProperties(type);
-                var getters = properties.ToDictionary(p => p, ExpressionUtils.GetPropertyGetter);
-
-                description = new CompositeTypeDescription(properties, ps => CreateObject(ctor, ps), (obj, pi) => getters[pi](obj));
+                description = new CompositeTypeDescription(properties, ps => CreateObject(ctor, ps), (obj, pi) => {
+                    return pi.GetValue(obj, null);
+                });
                 return true;
             }
 
@@ -37,7 +36,12 @@ namespace ExcelData.DataSerializer
 
         private static object CreateObject(ConstructorInfo ctor, IDictionary<PropertyInfo, object> properties)
         {
-            return ctor.Invoke(properties.Values.ToArray());
+            List<object> args = new List<object>();
+            foreach(var iter in properties.Values)
+            {
+                args.Add(iter);
+            }
+            return ctor.Invoke(args.ToArray());
         }
     }
 }
