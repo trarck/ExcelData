@@ -36,22 +36,36 @@ namespace ExcelData.DataSerializer
             return value;
         }
 
-        public static Type[] PrimitiveTypes = new Type[] { typeof(char),typeof(string),
+        public static HashSet<Type> PrimitiveTypes = new HashSet <Type> { typeof(char),typeof(string),
             typeof(short), typeof(ushort),
             typeof(byte),  typeof(sbyte),
             typeof(int), typeof(uint),
             typeof(long), typeof(ulong),
             typeof(float),  typeof(double),  typeof(decimal),  typeof(bool), typeof(TimeSpan), typeof(DateTime), typeof(DateTimeOffset), typeof(Uri), typeof(Guid),  typeof(Type)};
-        public static bool isPrimitive(Type type)
+        public static bool IsPrimitive(Type type)
         {
-            for (int i = 0, l = PrimitiveTypes.Length; i < l; ++i)
+            return PrimitiveTypes.Contains(type);
+        }
+
+        public static bool IsNumericType(Type type)
+        {
+            switch (Type.GetTypeCode(type))
             {
-                if (PrimitiveTypes[i] == type)
-                {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
                     return true;
-                }
+                default:
+                    return false;
             }
-            return false;
         }
     }
 }
