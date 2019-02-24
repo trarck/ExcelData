@@ -5,7 +5,7 @@ namespace ExcelData.DataSerializer
     /// <summary>
     /// Represents info how to serialize primitive type.
     /// </summary>
-    public class PrimitiveTypeDescription
+    public class PrimitiveTypeDescription:TypeDescription
     {
         public PrimitiveTypeDescription(IPrimitiveSerializer serializer, XmlCharacterType characterType)
         {

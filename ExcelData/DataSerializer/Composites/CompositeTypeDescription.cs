@@ -7,7 +7,7 @@ namespace ExcelData.DataSerializer
     /// <summary>
     /// Represents info how to serialize composite types.
     /// </summary>
-    public class CompositeTypeDescription
+    public class CompositeTypeDescription:TypeDescription
     {
         public CompositeTypeDescription(
             IEnumerable<PropertyInfo> properties, 

@@ -1,33 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace ExcelData.DataSerializer
 {
     public class SerializerSettings
     {
         private readonly INameProvider nameProvider;
-        private readonly IPrimitiveTypeProvider primitiveProvider;
-        private readonly ICollectionTypeProvider collectionProvider;
-        private readonly ICompositeTypeProvider compositeProvider;
+        private readonly ITypeProvider typeProvider;       
 
         public SerializerSettings(
             INameProvider nameProvider,
-            IPrimitiveTypeProvider primitiveProvider,
-            ICollectionTypeProvider collectionProvider,
-            ICompositeTypeProvider compositeProvider)
+            ITypeProvider typeProvider)
         {
             if (nameProvider == null)
                 throw new ArgumentNullException("nameProvider");
-            if (primitiveProvider == null)
-                throw new ArgumentNullException("primitiveProvider");
-            if (collectionProvider == null)
-                throw new ArgumentNullException("collectionProvider");
-            if (compositeProvider == null)
-                throw new ArgumentNullException("compositeProvider");
+            if (typeProvider == null)
+                throw new ArgumentNullException("typeProvider");
 
             this.nameProvider = nameProvider;
-            this.primitiveProvider = primitiveProvider;
-            this.collectionProvider = collectionProvider;
-            this.compositeProvider = compositeProvider;
+            this.typeProvider = typeProvider;
         }
 
         /// <summary>
@@ -39,27 +31,11 @@ namespace ExcelData.DataSerializer
         }
 
         /// <summary>
-        /// Gets <see cref="IPrimitiveTypeProvider"/>.
+        /// Gets <see cref="ITypeProvider"/>.
         /// </summary>
-        public IPrimitiveTypeProvider PrimitiveProvider
+        public ITypeProvider TypeProvider
         {
-            get { return primitiveProvider; }
-        }
-
-        /// <summary>
-        /// Gets <see cref="ICollectionTypeProvider"/>.
-        /// </summary>
-        public ICollectionTypeProvider CollectionProvider
-        {
-            get { return collectionProvider; }
-        }
-
-        /// <summary>
-        /// Gets <see cref="ICompositeTypeProvider"/>.
-        /// </summary>
-        public ICompositeTypeProvider CompositeProvider
-        {
-            get { return compositeProvider; }
+            get { return typeProvider; }
         }
     }
 }

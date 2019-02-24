@@ -1,68 +1,70 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace ExcelData.DataSerializer
 {
-    /// <summary>
-    /// Provides xml element and attribute names based on type information or property information.
-    /// </summary>
-    public class NameProvider : INameProvider
+    public class NameProvider
     {
-        private readonly string collectionElementName;
-        private readonly string collectionItemName;
-
-        private readonly ICollectionTypeProvider collectionProvider;
-
-        public NameProvider(ICollectionTypeProvider collectionProvider, string collectionElementName, string collectionItemName)
-        {
-            if (collectionProvider == null) 
-                throw new ArgumentNullException("collectionProvider");
-            if (collectionElementName == null) 
-                throw new ArgumentNullException("collectionElementName");
-            if (collectionItemName == null) 
-                throw new ArgumentNullException("collectionItemName");
-
-            this.collectionProvider = collectionProvider;
-            this.collectionElementName = collectionElementName;
-            this.collectionItemName = collectionItemName;
-        }
+        List<INameProvider> nameProviders=new List<INameProvider>();
+        List<int> nameProviderPriorities = new List<int>();
 
         public NodeName GetNodeName(Type type,object obj)
         {
-            var elementName = type.Name;
-            var itemName = string.Empty;
 
-            CollectionTypeDescription collectionDescription;
-
-            // if it is collection type
-            if (collectionProvider.TryGetDescription(type, out collectionDescription))
+            NodeName nodeName = NodeName.Empty;
+            for(int i = 0, l = nameProviders.Count; i < l; ++i)
             {
-                elementName = collectionElementName;
-                itemName = collectionItemName;
-            }
-            else if (type.IsGenericType)
-            {
-                // if generic type, cut of 'generic' part of type name
-                elementName = type.Name.Substring(0, type.Name.IndexOf('`'));
+                nodeName = Merge(nodeName, nameProviders[i].GetNodeName(type,obj));
             }
 
-            return new NodeName(elementName, itemName);
+            return nodeName;
         }
 
         public NodeName GetNodeName(PropertyInfo propertyInfo,object obj)
         {
-            var elementName = propertyInfo.Name;
-            var itemName = string.Empty;
 
-            CollectionTypeDescription collectionDescription;
-
-            // if type of property is collection, then additionally provide item name
-            if (collectionProvider.TryGetDescription(propertyInfo.PropertyType, out collectionDescription))
+            NodeName nodeName = NodeName.Empty;
+            for (int i = 0, l = nameProviders.Count; i < l; ++i)
             {
-                itemName = collectionItemName;
+                nodeName = Merge(nodeName, nameProviders[i].GetNodeName(propertyInfo, obj));
             }
+            return nodeName;
+        }
 
-            return new NodeName(elementName, itemName);
+        public void AddProvider(INameProvider nameProvider, int priority)
+        {
+            for (int i = 0, l = nameProviders.Count; i < l; ++i)
+            {
+                if (nameProviderPriorities[i] < priority)
+                {
+                    nameProviders.Insert(i, nameProvider);
+                    nameProviderPriorities.Insert(i, priority);
+                    break;
+                }
+            }
+        }
+
+        public void RemoveProvider(INameProvider nameProvider)
+        {
+            for (int i = 0, l = nameProviders.Count; i < l; ++i)
+            {
+                if (nameProviders[i] == nameProvider)
+                {
+                    nameProviders.RemoveAt(i);
+                    nameProviderPriorities.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+                
+        private static NodeName Merge(NodeName left, NodeName right)
+        {
+            var elementName = left.HasElementName ? left.ElementName : right.ElementName;
+            var attributeName = left.HasAttributeName ? left.AttributeName : right.AttributeName;
+            var itemName = left.HastItemName ? left.ItemName : right.ItemName;
+
+            return new NodeName(elementName, itemName, attributeName);
         }
     }
 }

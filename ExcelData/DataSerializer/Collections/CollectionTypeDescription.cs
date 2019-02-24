@@ -6,7 +6,7 @@ namespace ExcelData.DataSerializer
     /// <summary>
     /// Represents info how to serialize collection types.
     /// </summary>
-    public class CollectionTypeDescription
+    public class CollectionTypeDescription:TypeDescription
     {
         public CollectionTypeDescription(Type itemType, Func<IList, object> factory)
             :this(itemType,factory,null,null)
