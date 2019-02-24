@@ -67,6 +67,11 @@
   <ItemGroup>
     <Compile Include="DataSerializer\Collections\ArrayCollectionTypeProvider.cs" />
     <Compile Include="DataSerializer\Collections\ChainedCollectionTypeProvider.cs" />
+    <Compile Include="DataSerializer\ITypeProvider.cs" />
+    <Compile Include="DataSerializer\SerializerSettingBulder.cs" />
+    <Compile Include="DataSerializer\TypeProvider.cs" />
+    <Compile Include="DataSerializer\Naming\NameProviders\NameProvider.cs" />
+    <Compile Include="DataSerializer\TypeDescription.cs" />
     <Compile Include="DataSerializer\Collections\CollectionTypeDescription.cs" />
     <Compile Include="DataSerializer\Collections\CollectionTypeProvider.cs" />
     <Compile Include="DataSerializer\Collections\DataAttributesCollectionProvider.cs" />
@@ -102,7 +107,7 @@
     <Compile Include="DataSerializer\Naming\NameProviders\CompositeNameProvider.cs" />
     <Compile Include="DataSerializer\Naming\NameProviders\DataAttributesNameProvider.cs" />
     <Compile Include="DataSerializer\Naming\NameProviders\NameNormilizerNameProvider.cs" />
-    <Compile Include="DataSerializer\Naming\NameProviders\NameProvider.cs" />
+    <Compile Include="DataSerializer\Naming\NameProviders\BaseNameProvider.cs" />
     <Compile Include="DataSerializer\Naming\NameProviders\XmlAttributesNameProvider.cs" />
     <Compile Include="DataSerializer\Naming\NodeName.cs" />
     <Compile Include="DataSerializer\NodeProvider.cs" />
