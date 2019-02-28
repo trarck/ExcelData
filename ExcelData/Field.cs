@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TK.ExcelData
+namespace Excel.ExcelData
 {
     
     public class Field
@@ -62,21 +62,52 @@ namespace TK.ExcelData
 
         public static ExcelDataType Parse(string type, out string extType)
         {
+            extType = null;
+
+            switch (type)
+            {
+                case "int":
+                case "Int":
+                    return ExcelDataType.Int;
+                case "float":
+                case "Float":
+                    return ExcelDataType.Float;
+                case "string":
+                case "String":
+                    return ExcelDataType.String;
+                case "bool":
+                case "Bool":
+                    return ExcelDataType.Boolean;
+                case "long":
+                case "Long":
+                    return ExcelDataType.Long;
+                case "double":
+                case "Double":
+                    return ExcelDataType.Double;
+                case "array":
+                case "Array":
+                    return ExcelDataType.Array;
+                case "list":
+                case "List":
+                    return ExcelDataType.List;
+                case "dictionary":
+                case "Dictionary":
+                    return ExcelDataType.Dictionary;
+            }
+
+            //genetic type
             int pos = type.IndexOf("<");
             if (pos > -1)
             {
                 string baseType = type.Substring(0, pos);
-                int posEnd = type.IndexOf(">");
+                int posEnd = type.LastIndexOf(">");
                 
                 extType = type.Substring(pos + 1, posEnd-pos-1);
                 
-                return EnumUtil.ParseEnum<ExcelDataType>(baseType, ExcelDataType.Object);
+                return Parse(baseType);
             }
-            else
-            {
-                extType = "";
-                return EnumUtil.ParseEnum<ExcelDataType>(type, ExcelDataType.Object);
-            }
+
+            return ExcelDataType.Object;
         }
 
         public string GetMemberType()
