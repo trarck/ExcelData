@@ -5,30 +5,30 @@ namespace TK.ExcelData
 {
     public static class EDExtensionMethods
     {
-        public static Type ToSystemType(this ExcelDataType dataType)
+        public static Type ToSystemType(this TypeInfo dataType)
         {
             Type t = null;
-            switch (dataType)
+            switch (dataType.sign)
             {
-                case ExcelDataType.Int:
+                case TypeInfo.Sign.Int:
                     t = typeof(int);
                     break;
-                case ExcelDataType.Long:
+                case TypeInfo.Sign.Long:
                     t = typeof(long);
                     break;
-                case ExcelDataType.Float:
+                case TypeInfo.Sign.Float:
                     t = typeof(float);
                     break;
-                case ExcelDataType.Double:
+                case TypeInfo.Sign.Double:
                     t = typeof(double);
                     break;
-                case ExcelDataType.String:
+                case TypeInfo.Sign.String:
                     t = typeof(string);
                     break;
-                case ExcelDataType.Boolean:
+                case TypeInfo.Sign.Boolean:
                     t = typeof(bool);
                     break;
-                case ExcelDataType.Object:
+                case TypeInfo.Sign.Object:
                     t = typeof(object);
                     break;
             }
@@ -37,11 +37,11 @@ namespace TK.ExcelData
 
         public static Type ToSystemType(this Field field)
         {
-            if (field.type == ExcelDataType.List)
+            if (field.type == TypeInfo.List)
             {
                 return Type.GetType("System.Collections.Generic.List`1"+ "["+field.ExtTypeToSystemType().FullName+"]");
             }
-            else if (field.type == ExcelDataType.Dictionary)
+            else if (field.type == TypeInfo.Dictionary)
             {
                 string memberType = field.extMemberType;
                 string[] splits = memberType.Split(',');
@@ -49,7 +49,7 @@ namespace TK.ExcelData
                 string fullMemberType = "";
                 for (int i = 0; i < splits.Length; ++i)
                 {
-                    ExcelDataType dataType = EnumUtil.ParseEnum<ExcelDataType>(splits[i], ExcelDataType.String);
+                    TypeInfo dataType = EnumUtil.ParseEnum<TypeInfo>(splits[i], TypeInfo.String);
                     //不支持嵌套
                     fullMemberType += ((i == 0) ? "" : ",") + dataType.ToSystemType().FullName;
                 }
@@ -64,8 +64,7 @@ namespace TK.ExcelData
         public static Type ExtTypeToSystemType(this Field field)
         {
             //现在还不支持复杂类型
-            ExcelDataType dataType = EnumUtil.ParseEnum<ExcelDataType>(field.extType, ExcelDataType.String);
-            return dataType.ToSystemType();
+            return null;
         }
     }
 }

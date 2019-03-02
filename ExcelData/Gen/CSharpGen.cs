@@ -34,34 +34,34 @@ namespace TK.ExcelData
         {
             string typeDefine = "object";
 
-            switch (field.type)
+            switch (field.type.sign)
             {
-                case ExcelDataType.String:
+                case TypeInfo.Sign.String:
                     typeDefine = "string";
                     break;
-                case ExcelDataType.Int:
+                case TypeInfo.Sign.Int:
                     typeDefine = "int";
                     break;
-                case ExcelDataType.Float:
+                case TypeInfo.Sign.Float:
                     typeDefine = "float";
                     break;
-                case ExcelDataType.Array:
-                    typeDefine = (field.extType==""?"string":field.extType)+"[]";
+                case TypeInfo.Sign.Array:
+                    typeDefine = "object []";
                     break;
-                case ExcelDataType.List:
-                    typeDefine = "List<"+ (field.extType == "" ? "object" : field.extType) + ">";
+                case TypeInfo.Sign.List:
+                    typeDefine = "List<object>";
                     break;
-                case ExcelDataType.Dictionary:                    
-                    typeDefine = "Dictionary<"+ (field.extType == "" ? "string,object" : field.extType) + ">";
+                case TypeInfo.Sign.Dictionary:                    
+                    typeDefine = "Dictionary<string,object>";
                     break;
-                case ExcelDataType.Long:
+                case TypeInfo.Sign.Long:
                     typeDefine = "long";
                     break;
-                case ExcelDataType.Double:
+                case TypeInfo.Sign.Double:
                     typeDefine = "double";
                     break;
-                case ExcelDataType.Custom:
-                    typeDefine = field.extType;
+                case TypeInfo.Sign.Generic:
+                    typeDefine = field.type.ToString();
                     break;
             }
 

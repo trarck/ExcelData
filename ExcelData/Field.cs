@@ -12,10 +12,7 @@ namespace TK.ExcelData
         string m_Description;
 
         //数据类型
-        ExcelDataType m_Type;
-
-        //扩展类型
-        string m_ExtType;
+        TypeInfo m_Type;
 
         //注释
         string m_Comment;
@@ -31,125 +28,30 @@ namespace TK.ExcelData
 
         }
 
-        public Field(string name,ExcelDataType type)
+        public Field(string name,TypeInfo type)
         {
             m_Name = name;
             m_Type = type;
         }
-
-        public Field(string name, ExcelDataType type,string extType)
+        
+        public Field(string name, TypeInfo type, string comment,string description)
         {
             m_Name = name;
             m_Type = type;
-            m_ExtType = extType;
-        }
-
-        public Field(string name, ExcelDataType type, string extType,string comment,string description)
-        {
-            m_Name = name;
-            m_Type = type;
-            m_ExtType = extType;
             m_Comment = comment;
             m_Description = description;
         }
 
-        public static ExcelDataType Parse(string type)
-        {
-            string extType;
-            return Parse(type, out extType);
-        }
-
-        public static ExcelDataType Parse(string type, out string extType)
-        {
-            extType = null;
-
-            switch (type)
-            {
-                case "int":
-                case "Int":
-                    return ExcelDataType.Int;
-                case "float":
-                case "Float":
-                    return ExcelDataType.Float;
-                case "string":
-                case "String":
-                    return ExcelDataType.String;
-                case "bool":
-                case "Bool":
-                    return ExcelDataType.Boolean;
-                case "long":
-                case "Long":
-                    return ExcelDataType.Long;
-                case "double":
-                case "Double":
-                    return ExcelDataType.Double;
-                case "array":
-                case "Array":
-                    return ExcelDataType.Array;
-                case "list":
-                case "List":
-                    return ExcelDataType.List;
-                case "dictionary":
-                case "Dictionary":
-                    return ExcelDataType.Dictionary;
-            }
-
-            //genetic type
-            int pos = type.IndexOf("<");
-            if (pos > -1)
-            {
-                string baseType = type.Substring(0, pos);
-                int posEnd = type.LastIndexOf(">");
-                
-                extType = type.Substring(pos + 1, posEnd-pos-1);
-                
-                return Parse(baseType);
-            }
-
-            return ExcelDataType.Object;
-        }
-
         public string GetMemberType()
         {
-            if (m_Type == ExcelDataType.Dictionary)
-            {
-                //Dictionary<key,value>,Dictionary<key:xxx,value>,Dictionary<key:xxx,value:xxx>
-                string[] splits = m_ExtType.Split(',');
-                string memType = "";
-                string pureType = "";
-                for (int i = 0; i < splits.Length; ++i)
-                {
-                    int pos = splits[i].IndexOf(':');
-                    if (pos != -1)
-                    {
-                        pureType= splits[i].Substring(0, pos);
-                    }
-                    else
-                    {
-                        pureType = splits[i];
-                    }                    
-                    memType +=((i==0) ?"":",")+pureType;
-                }
-                return memType;       
-            }
-            else
-            {
-                return m_ExtType;
-            }
+            return "";
         }
 
         public string GetExtTypeKeyField()
         {
-            string[] splits = m_ExtType.Split(',');
-            int pos = splits[0].IndexOf(':');
-            if (pos != -1)
-            {
-                return splits[0].Substring(0, pos);
-            }
-            else
-            {
+         
                 return "";
-            }            
+      
         }
 
         public override string ToString()
@@ -170,7 +72,7 @@ namespace TK.ExcelData
             }
         }
 
-        public ExcelDataType type
+        public TypeInfo type
         {
             set
             {
@@ -182,22 +84,7 @@ namespace TK.ExcelData
                 return m_Type;
             }
         }
-
-        public string extType
-        {
-            set
-            {
-                m_ExtType = value;
-                m_ExtMemberType = GetMemberType();
-                m_ExtTypeKeyField = GetExtTypeKeyField();
-            }
-
-            get
-            {
-                return m_ExtType;
-            }
-        }
-
+        
         public string comment
         {
             set

@@ -6,44 +6,82 @@ namespace TK.ExcelData
     
     public class TypeInfo
     {
-        public TypeInfo(string name)
+        public enum Sign
         {
-            this.name = name;
-        }
-
-        public TypeInfo(string name, TypeInfo genericType)
-        {
-            this.name = name;
-            isGeneric = true;
-            this.genericType = genericType;
-        }
-
-        public TypeInfo(string name, TypeInfo genericType,TypeInfo genericKeyType)
-        {
-            this.name = name;
-            isGeneric = true;
-            this.genericType = genericType;
-            this.genericKeyType = genericKeyType;
+            Object,//未知
+            Int,
+            Float,
+            String,
+            Boolean,
+            Array,
+            Dictionary,
+            List,
+            Long,
+            Double,
+            Generic
         }
 
         public string name { get; set; }
-        public bool isGeneric { get; set; }
+        public Sign sign { get; set; }
         public TypeInfo genericType { get; set; }
-        public TypeInfo genericKeyType { get; set; }
 
-        public bool isGenericArray { get { return isGeneric && genericKeyType == null; } }
-        public bool isGenericDictionary { get { return isGeneric && genericKeyType != null; } }
+        public bool isGeneric { get { return sign == Sign.Generic; } }
+        List<TypeInfo> _genericArguments;
+        public List<TypeInfo> genericArguments
+        {
+            get
+            {
+                if (_genericArguments == null)
+                {
+                    _genericArguments = new List<TypeInfo>();
+                }
+                return _genericArguments;
+            }
+            set
+            {
+                _genericArguments = value;
+            }
+        }
 
-        public static TypeInfo Int = new TypeInfo("int");
-        public static TypeInfo Long = new TypeInfo("Long");
-        public static TypeInfo Float = new TypeInfo("Float");
-        public static TypeInfo Double = new TypeInfo("Double");
-        public static TypeInfo String = new TypeInfo("String");
-        public static TypeInfo Boolean = new TypeInfo("Boolean");
-        public static TypeInfo Object = new TypeInfo("Object");
-        public static TypeInfo Array = new TypeInfo("Array");
-        public static TypeInfo List = new TypeInfo("List");
-        public static TypeInfo Dictionary = new TypeInfo("Dictionary");
+        public bool isGenericArray { get { return isGeneric && genericArguments.Count == 1; } }
+        public bool isGenericDictionary { get { return isGeneric && genericArguments.Count == 2; } }
+
+        public TypeInfo(string name,Sign sign)
+        {
+            this.name = name;
+            this.sign = sign;
+        }
+
+        public TypeInfo(string name, Sign sign, TypeInfo genericType)
+            :this(name, sign)
+        {
+            this.genericType = genericType;
+        }
+
+        public TypeInfo(string name, Sign sign, TypeInfo genericType,List<TypeInfo> genericArguments)
+             : this(name, sign, genericType)
+        {
+            _genericArguments = genericArguments;
+        }
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public static TypeInfo Int = new TypeInfo("int",Sign.Int);
+        public static TypeInfo Long = new TypeInfo("long",Sign.Long);
+        public static TypeInfo Float = new TypeInfo("float",Sign.Float);
+        public static TypeInfo Double = new TypeInfo("double",Sign.Double);
+        public static TypeInfo String = new TypeInfo("string",Sign.String);
+        public static TypeInfo Boolean = new TypeInfo("boolean",Sign.Boolean);
+        public static TypeInfo Object = new TypeInfo("object",Sign.Object);
+        public static TypeInfo Array = new TypeInfo("Array",Sign.Array);
+        public static TypeInfo List = new TypeInfo("List",Sign.List);
+        public static TypeInfo Dictionary = new TypeInfo("Dictionary",Sign.Dictionary);
+        public static Dictionary< int , Dictionary< int,
+            string> > dd= new Dictionary<int, Dictionary
+                <int, string>>();
 
         public static TypeInfo Parse(string type)
         {
@@ -78,37 +116,88 @@ namespace TK.ExcelData
                 case "dictionary":
                 case "Dictionary":
                     return TypeInfo.Dictionary;
+                case "object":
+                case "Object":
+                    return TypeInfo.Object;
             }
 
             //genetic type
-            int pos = type.IndexOf("<");
-            if (pos > -1)
+            if (type.IndexOf("<") > -1)
             {
-                string baseType = type.Substring(0, pos);
-                int posEnd = type.LastIndexOf(">");
+                return ParseGeneric(type);
+            }
+            //custom type
+            return new TypeInfo(type,Sign.Object);
+        }
 
-                string geneticType = type.Substring(pos + 1, posEnd - pos - 1);
+        public class GenericStackInfo
+        {
+            public TypeInfo type;
+            public int start;
+        }
 
-                pos = geneticType.IndexOf(",");
-                if (pos > -1)
+        public static TypeInfo ParseGeneric(string type)
+        {
+            char[] buff=new char[255];
+            int len = 0;
+            char c;
+            Stack<GenericStackInfo> typeStack=new Stack<GenericStackInfo>();
+            GenericStackInfo current =null;
+            GenericStackInfo info = null;
+            int start=0;
+            for(int i = 0, l = type.Length; i < l; ++i)
+            {
+                c = type[i];
+                
+                switch (c)
                 {
-                    string keyType = geneticType.Substring(0, pos);
-                    if (keyType.IndexOf("<") == -1)
-                    {
-                        return new TypeInfo(type, Parse(geneticType), Parse(geneticType.Substring(pos+1)));
-                    }
-                    else
-                    {
-                        //list is generic dictionary
-                        return new TypeInfo(type, Parse(geneticType));
-                    }
-                }
-                else
-                {
-                    return new TypeInfo(type, Parse(geneticType));
+                    case '<':
+                        info = new GenericStackInfo();
+                        info.type = new TypeInfo(null,Sign.Generic, Parse(new string(buff, 0, len)));
+                        len = 0;
+                        info.start = start;
+                        start = i+1;
+
+                        if (current != null)
+                        {
+                            typeStack.Push(current);
+                            current.type.genericArguments.Add(info.type);
+                        }
+                        current = info;
+                        break;
+                    case '>':
+                        if (len > 0)
+                        {
+                            current.type.genericArguments.Add(Parse(new string(buff, 0, len)));
+                            len = 0;
+                        }
+
+                        current.type.name = type.Substring(current.start, i+1-current.start);
+
+                        if (typeStack.Count > 0)
+                        {
+                            current = typeStack.Pop();
+                        }
+                        break;
+                    case ',':
+                        if (len > 0)
+                        {
+                            current.type.genericArguments.Add(Parse(new string(buff, 0, len)));
+                            len = 0;
+                        }
+                        start = i + 1;
+                        break;
+                    case ' ':
+                    case '\t':
+                    case '\r':
+                    case '\n':
+                        break;
+                    default:
+                        buff[len++] = c;
+                        break;
                 }
             }
-            return TypeInfo.Object;
+            return current.type;
         }
     }
 }

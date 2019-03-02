@@ -137,31 +137,30 @@ namespace TK.ExcelData
             return data;
         }
 
-
         public static object GetCellValue(ICell cell, Field field)
         {
             if (cell != null)
             {
-                switch (field.type)
+                switch (field.type.sign)
                 {
-                    case ExcelDataType.Int:
+                    case TypeInfo.Sign.Int:
                         return ReadHelper.GetIntValue(cell);
-                    case ExcelDataType.Float:
+                    case TypeInfo.Sign.Float:
                         return ReadHelper.GetFloatValue(cell);
-                    case ExcelDataType.Long:
+                    case TypeInfo.Sign.Long:
                         return ReadHelper.GetLongValue(cell);
-                    case ExcelDataType.Double:
+                    case TypeInfo.Sign.Double:
                         return ReadHelper.GetDoubleValue(cell);
-                    case ExcelDataType.Boolean:
+                    case TypeInfo.Sign.Boolean:
                         return ReadHelper.GetBoolValue(cell);
-                    case ExcelDataType.String:
+                    case TypeInfo.Sign.String:
                         return ReadHelper.GetStringValue(cell);
-                    case ExcelDataType.List:
+                    case TypeInfo.Sign.List:
                         return LinkDataReader.GetLinkData(cell, field.ExtTypeToSystemType());
-                    case ExcelDataType.Array:
+                    case TypeInfo.Sign.Array:
                         return LinkDataReader.GetLinkArray(cell, field.ExtTypeToSystemType());
-                    case ExcelDataType.Dictionary:
-                        return LinkDataReader.GetLinkDict(cell, field.extTypeKeyField,field.extType.IndexOf("RemoveKey")>-1);
+                    case TypeInfo.Sign.Dictionary:
+                        return LinkDataReader.GetLinkDict(cell, field.extTypeKeyField);
                     default:
                         break;
                 }

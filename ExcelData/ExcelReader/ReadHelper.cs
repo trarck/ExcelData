@@ -29,23 +29,23 @@ namespace TK.ExcelData
             return headerFields;
         }
 
-        public static object GetCellValue(ICell cell, ExcelDataType dataType)
+        public static object GetCellValue(ICell cell, TypeInfo dataType)
         {
-            switch (dataType)
+            switch (dataType.sign)
             {
-                case ExcelDataType.Int:
+                case TypeInfo.Sign.Int:
                     return ReadHelper.GetIntValue(cell);
-                case ExcelDataType.Float:
+                case TypeInfo.Sign.Float:
                     return ReadHelper.GetFloatValue(cell);
-                case ExcelDataType.Long:
+                case TypeInfo.Sign.Long:
                     return ReadHelper.GetLongValue(cell);
-                case ExcelDataType.Double:
+                case TypeInfo.Sign.Double:
                     return ReadHelper.GetDoubleValue(cell);
-                case ExcelDataType.Boolean:
+                case TypeInfo.Sign.Boolean:
                     return ReadHelper.GetBoolValue(cell);
-                case ExcelDataType.String:
+                case TypeInfo.Sign.String:
                     return ReadHelper.GetStringValue(cell);
-                case ExcelDataType.Array:
+                case TypeInfo.Sign.Array:
                 default:
                     break;
             }

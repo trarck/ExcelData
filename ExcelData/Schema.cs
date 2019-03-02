@@ -14,20 +14,11 @@ namespace TK.ExcelData
             m_Fields = new List<Field>();
         }
 
-        public void AddField(string name, ExcelDataType type)
+        public void AddField(string name, TypeInfo type)
         {
             if (!Exists(name))
             {
                 Field field = new Field(name, type);
-                m_Fields.Add(field);
-            }
-        }
-
-        public void AddField(string name, ExcelDataType type,string extType)
-        {
-            if (!Exists(name))
-            {
-                Field field = new Field(name, type,extType);
                 m_Fields.Add(field);
             }
         }
@@ -40,7 +31,7 @@ namespace TK.ExcelData
             }
         }
 
-        public void RemoveField(string name,ExcelDataType type)
+        public void RemoveField(string name,TypeInfo type)
         {
             for (int i=0,l=m_Fields.Count;i< l;++i)
             {
@@ -52,7 +43,7 @@ namespace TK.ExcelData
             }
         }
 
-        public void UpdateField(string name, ExcelDataType newType)
+        public void UpdateField(string name, TypeInfo newType)
         {
             for (int i = 0, l = m_Fields.Count; i < l; ++i)
             {

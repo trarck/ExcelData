@@ -29,13 +29,12 @@ namespace TK.ExcelData
                 ICell descriptionCell = descriptionRow.GetCell(i);
                 string description = descriptionCell.StringCellValue;
 
-                ExcelDataType dataType = ExcelDataType.Object;
-                string extType = "";
+                TypeInfo dataType = TypeInfo.Object;
 
                 ICell typeCell = typeRow.GetCell(i);
                 if (typeCell!=null)
                 {
-                    dataType = Field.Parse(typeCell.StringCellValue, out extType);
+                    dataType = TypeInfo.Parse(typeCell.StringCellValue);
                 }
 
                 string comment = "";
@@ -44,7 +43,7 @@ namespace TK.ExcelData
                     comment = headCell.CellComment.String.String;
                 }
 
-                Field field = new Field(name, dataType, extType, comment,description);
+                Field field = new Field(name, dataType, comment,description);
                 schema.AddField(field);
             }
 

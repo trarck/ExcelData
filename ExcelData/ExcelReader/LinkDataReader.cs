@@ -134,7 +134,7 @@ namespace TK.ExcelData
             return list;
         }
 
-        static List<T> GetPrimitiveList<T>(ISheet sheet, int rowIndex, int colIndex, ExcelDataType dataType)
+        static List<T> GetPrimitiveList<T>(ISheet sheet, int rowIndex, int colIndex, TypeInfo dataType)
         {
             List<T> list = new List<T>();
 
