@@ -147,40 +147,25 @@ namespace TK.ExcelData
             return list;
         }
 
-        static object GetListData(ISheet sheet, int rowIndex, int colIndex, Type t)
+        static object GetListData(ISheet sheet, int rowIndex, int colIndex, TypeInfo t)
         {
-            if (t == typeof(int) || t == typeof(int?))
+            switch (t.sign)
             {
-                return GetListInt(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(long) || t == typeof(long?))
-            {
-                return GetListLong(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(float) || t == typeof(float?))
-            {
-                return GetListFloat(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(double) || t == typeof(double?))
-            {
-                return GetListDouble(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(string))
-            {
-                return GetListString(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(bool) || t == typeof(bool?))
-            {
-                return GetListBool(sheet, rowIndex, colIndex);
-            }
-            else if (t == typeof(object))
-            {
-                Schema schema = SchemaReader.ReadSchema(sheet);
-                return DataReader.ReadList(sheet, schema);
-            }
-            else
-            {
-                return null;
+                case TypeInfo.Sign.Int:
+                    return GetListInt(sheet, rowIndex, colIndex);
+                case TypeInfo.Sign.Float:
+                    return GetListFloat(sheet, rowIndex, colIndex);
+                case TypeInfo.Sign.Long:
+                    return GetListLong(sheet, rowIndex, colIndex);
+                case TypeInfo.Sign.Double:
+                    return GetListDouble(sheet, rowIndex, colIndex);
+                case TypeInfo.Sign.Boolean:
+                    return GetListBool(sheet, rowIndex, colIndex);
+                case TypeInfo.Sign.String:
+                    return GetListString(sheet, rowIndex, colIndex);
+                default:
+                    Schema schema = SchemaReader.ReadSchema(sheet);
+                    return DataReader.ReadList(sheet, schema);
             }
         }
 
@@ -222,11 +207,6 @@ namespace TK.ExcelData
             ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
 
             return GetListData(linkSheet, cp.row, cp.col, t);
-        }
-
-        public static List<T> GetLinkData<T>(ICell cell)
-        {
-            return GetLinkData(cell, typeof(T)) as List<T>;
         }
 
         //获取数组数据

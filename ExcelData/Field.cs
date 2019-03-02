@@ -42,18 +42,6 @@ namespace TK.ExcelData
             m_Description = description;
         }
 
-        public string GetMemberType()
-        {
-            return "";
-        }
-
-        public string GetExtTypeKeyField()
-        {
-         
-                return "";
-      
-        }
-
         public override string ToString()
         {
             return string.Format("Field[{0}]--{1}",m_Name ,m_Type);
