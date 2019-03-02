@@ -155,6 +155,7 @@
     <Compile Include="Gen\CodeGen.cs" />
     <Compile Include="Define.cs" />
     <Compile Include="EDExtensionMethods.cs" />
+    <Compile Include="TypeInfo.cs" />
     <Compile Include="Utils\ExcelHelper.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
