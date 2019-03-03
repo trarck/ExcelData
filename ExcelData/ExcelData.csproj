@@ -66,20 +66,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataSerializer\ISerializer.cs" />
+    <Compile Include="ExcelReader\IDataReader.cs" />
     <Compile Include="Gen\CSharpGen.cs" />
     <Compile Include="Gen\DataGen.cs" />
     <Compile Include="Gen\XmlDataGen.cs" />
     <Compile Include="Gen\JsonDataGen.cs" />
     <Compile Include="Gen\CodeGen.cs" />
     <Compile Include="Define.cs" />
-    <Compile Include="EDExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="TypeInfo.cs" />
     <Compile Include="Utils\ExcelHelper.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExcelReader\DataReader.cs" />
-    <Compile Include="ExcelReader\LinkDataReader.cs" />
-    <Compile Include="ExcelReader\Reader.cs" />
+    <Compile Include="ExcelReader\ReadLinkHelper.cs" />
     <Compile Include="ExcelReader\ReadHelper.cs" />
     <Compile Include="ExcelReader\SchemaReader.cs" />
     <Compile Include="Schema.cs" />

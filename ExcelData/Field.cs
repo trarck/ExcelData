@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TK.ExcelData
+﻿namespace TK.ExcelData
 {
     public class Field
     {
@@ -16,12 +13,6 @@ namespace TK.ExcelData
 
         //注释
         string m_Comment;
-
-        //纯的成员类型
-        string m_ExtMemberType;
-
-        //用于dictionary的key指向的字段
-        string m_ExtTypeKeyField;
 
         public Field()
         {
@@ -83,22 +74,6 @@ namespace TK.ExcelData
             get
             {
                 return m_Comment;
-            }
-        }
-
-        public string extMemberType
-        {
-            get
-            {
-                return m_ExtMemberType;
-            }
-        }
-
-        public string extTypeKeyField
-        {
-            get
-            {
-                return m_ExtTypeKeyField;
             }
         }
 

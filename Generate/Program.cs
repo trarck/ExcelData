@@ -10,31 +10,6 @@ namespace Generate
        
         static void Main(string[] args)
         {
-            TypeInfo ti1 = TypeInfo.Parse("Int");
-            TypeInfo ti2 = TypeInfo.Parse("int");
-            Console.WriteLine(ti1 == ti2);
-
-            TypeInfo tlist = TypeInfo.Parse("list<int>");
-            Console.WriteLine(tlist.genericType.name);
-            Console.WriteLine(tlist.genericArguments[0].name);
-
-            TypeInfo tdict= TypeInfo.Parse("Dictionary<int,string>");
-            Console.WriteLine(tdict.genericType.name);
-            Console.WriteLine(tdict.genericArguments[0].name);
-            Console.WriteLine(tdict.genericArguments[1].name);
-            
-            TypeInfo ttest= TypeInfo.Parse("Test<int,string>");
-            Console.WriteLine(ttest.genericType.name);
-            Console.WriteLine(ttest.genericArguments[0].name);
-            Console.WriteLine(ttest.genericArguments[1].name);
-
-            TypeInfo tm1 = TypeInfo.Parse("List<Dictionary<int,string>>");
-            TypeInfo tm2 = TypeInfo.Parse("List<Dictionary<int,List<Dictionary<int,string>>>>");
-            TypeInfo tm3 = TypeInfo.Parse("Dictionary<Dictionary<int,List<Dictionary<int,string>>>,Dictionary<int,List<Dictionary<int,string>>>>");
-            TypeInfo tm4 = TypeInfo.Parse("My<int,Dictionary<int,string>,String,List<Dictionary<int,string>>>");
-
-            Console.WriteLine(tm3);
-
             string excelFile = null;
             string classOutPath = null;
             string dataOutPath = null;

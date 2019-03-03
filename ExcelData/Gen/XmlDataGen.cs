@@ -14,7 +14,7 @@ namespace TK.ExcelData
 
         public override void Generate(ISheet sheet,Schema schema, string outPath)
         {
-            object list = DataReader.ReadList(sheet, schema);
+            object list = ReadHelper.ReadList(sheet, schema);
 
             string tableName = schema.name;
             if (!Directory.Exists(outPath))
