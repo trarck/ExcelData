@@ -102,8 +102,8 @@ namespace TK.ExcelData
                     break;
                 }
             }
-            //从0开始
-            cp.colEnd = colEnd - 1;
+            //从0开始。
+            cp.colEnd = colEnd -1;
 
             //end row
             for (; i < posString.Length; ++i)
@@ -244,7 +244,7 @@ namespace TK.ExcelData
             Schema schema = SchemaReader.ReadSchema(linkSheet);
 
             //内容要跳过头
-            return ReadHelper.ReadDictionary(linkSheet, schema, keyField,cp.rowStart,cp.colStart,cp.colEnd,null, removeKeyFieldInElement,cp.rowEnd);
+            return ReadHelper.ReadDictionary(linkSheet, schema, keyField,cp.rowStart,cp.colStart,cp.colEnd+1,null, removeKeyFieldInElement,cp.rowEnd);
         }
 
         public static object ReadLinkObject(ICell cell, TypeInfo t)
@@ -262,7 +262,7 @@ namespace TK.ExcelData
             Schema schema = SchemaReader.ReadSchema(linkSheet);
 
             //内容要跳过头
-            return ReadHelper.ReadList(linkSheet, schema, cp.rowStart, cp.rowEnd, cp.colStart,cp.colEnd,null)[0];
+            return ReadHelper.ReadList(linkSheet, schema, cp.rowStart, cp.rowEnd, cp.colStart,cp.colEnd+1,null)[0];
         }
     }
 }
