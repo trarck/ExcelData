@@ -37,8 +37,8 @@ namespace Generate
                 dataOutPath = args[2];
             }
 
-            string workPath = System.IO.Directory.GetCurrentDirectory();
-           // GenWorkbook(Path.Combine(workPath, excelFile), Path.Combine(workPath, classOutPath), Path.Combine(workPath, dataOutPath));
+           string workPath = System.IO.Directory.GetCurrentDirectory();
+           GenWorkbook(Path.Combine(workPath, excelFile), Path.Combine(workPath, classOutPath), Path.Combine(workPath, dataOutPath));
         }
 
         static void GenWorkbook(string excelFile,string classOutPath,string dataOutPath)
