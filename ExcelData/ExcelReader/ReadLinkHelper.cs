@@ -8,63 +8,110 @@ namespace TK.ExcelData
     {
         public struct CellPosition
         {
-            public int col;
-            public int startRow;
-            public int endRow;
+            public int colStart;
+            public int colEnd;
+            public int rowStart;
+            public int rowEnd;
         }
 
+        /// <summary>
+        /// 解析出目标位置
+        /// A1B2;A1,B2;A1,2;1,B2;1,2
+        /// </summary>
+        /// <param name="posString"></param>
+        /// <returns></returns>
         public static CellPosition GetCellPosition(string posString)
         {
             CellPosition cp = new CellPosition();
 
-            int col = 0;
-            int startRow = 0;
-            int endRow = 0;
+            int colStart = 0;
+            int colEnd = 0;
+            int rowStart = 0;
+            int rowEnd = 0;
 
             int i = 0;
-            //col
+
+            //col start
             for (; i < posString.Length; ++i)
             {
                 char c = posString[i];
                 if ('a' <= c && c <= 'z')
                 {
-                    col = col * 26 + c - 'a' + 1;
+                    colStart = colStart * 26 + c - 'a'+1;
                 }
                 else if ('A' <= c && c <= 'Z')
                 {
-                    col = col * 26 + c - 'A' + 1;
+                    colStart = colStart * 26 + c - 'A'+1;
                 }
                 else
                 {
                     break;
                 }
             }
-            //索引号从0开始
-            cp.col = col - 1;
-           
-            //start row
+            //从0开始
+            if (colStart == 0)
+            {
+                cp.colStart = 0;
+            }
+            else
+            {
+                cp.colStart = colStart - 1;
+            }
+
+            //row start
             for (; i < posString.Length; ++i)
             {
                 char c = posString[i];
                 if ('0' <= c && c <= '9')
                 {
-                    startRow = startRow * 10 + c - '0';
+                    rowStart = rowStart * 10 + c - '0';
+                }
+                else
+                {
+                    if (c == ',')
+                    {
+                        ++i;
+                    }
+                    break;
+                }
+            }
+            //从0开始
+            if (rowStart == 0)
+            {
+                cp.rowStart = 0;
+            }
+            else
+            {
+                cp.rowStart = rowStart - 1;
+            }
+
+            //col end
+            for (; i < posString.Length; ++i)
+            {
+                char c = posString[i];
+                if ('a' <= c && c <= 'z')
+                {
+                    colEnd = colEnd * 26 + c - 'a' + 1;
+                }
+                else if ('A' <= c && c <= 'Z')
+                {
+                    colEnd = colEnd * 26 + c - 'A' + 1;
                 }
                 else
                 {
                     break;
                 }
             }
-            //索引号从0开始
-            cp.startRow = startRow - 1;
-            i++;
+            //从0开始
+            cp.colEnd = colEnd - 1;
+
             //end row
             for (; i < posString.Length; ++i)
             {
                 char c = posString[i];
                 if ('0' <= c && c <= '9')
                 {
-                    endRow = endRow * 10 + c - '0';
+                    rowEnd = rowEnd * 10 + c - '0';
                 }
                 else
                 {
@@ -72,7 +119,7 @@ namespace TK.ExcelData
                 }
             }
             //索引号从0开始
-            cp.endRow = endRow - 1;
+            cp.rowEnd = rowEnd - 1;
             return cp;
         }
 
@@ -109,9 +156,9 @@ namespace TK.ExcelData
             {
                 //第一列，第一行
                 start = new CellPosition();
-                start.startRow = 0;
-                start.col = 0;
-                start.endRow = -1;
+                start.rowStart = 0;
+                start.colStart = 0;
+                start.rowEnd = -1;
                 linkSheetName = linkWhere;
             }
 
@@ -173,7 +220,7 @@ namespace TK.ExcelData
 
             ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
 
-            return ReadListData(linkSheet, cp.col, cp.startRow,cp.endRow, t);
+            return ReadListData(linkSheet, cp.colStart, cp.rowStart,cp.rowEnd, t);
         }
                 
         public static object ReadLinkArray(ICell cell, TypeInfo t)
@@ -197,7 +244,25 @@ namespace TK.ExcelData
             Schema schema = SchemaReader.ReadSchema(linkSheet);
 
             //内容要跳过头
-            return ReadHelper.ReadDictionary(linkSheet, schema, keyField,cp.startRow+Constance.SchemaDataRow,cp.col,null, removeKeyFieldInElement);
+            return ReadHelper.ReadDictionary(linkSheet, schema, keyField,cp.rowStart,cp.colStart,cp.colEnd,null, removeKeyFieldInElement,cp.rowEnd);
+        }
+
+        public static object ReadLinkObject(ICell cell, TypeInfo t)
+        {
+            if (cell == null || cell.StringCellValue == "") return null;
+            string linkWhere = cell.StringCellValue;
+            CellPosition cp;
+            string linkSheetName = ParseLinkCell(cell, out cp);
+            if (cp.rowEnd <= 0)
+            {
+                cp.rowEnd = cp.rowStart;
+            }
+
+            ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
+            Schema schema = SchemaReader.ReadSchema(linkSheet);
+
+            //内容要跳过头
+            return ReadHelper.ReadList(linkSheet, schema, cp.rowStart, cp.rowEnd, cp.colStart,cp.colEnd,null)[0];
         }
     }
 }

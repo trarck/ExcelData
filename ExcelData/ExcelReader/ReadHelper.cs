@@ -6,13 +6,14 @@ namespace TK.ExcelData
     public class ReadHelper
     {
         #region header
-        public static List<string> GetHeader(ISheet sheet, int headerOffset = 0,int colOffset=0)
+        public static List<string> GetHeader(ISheet sheet, int headerOffset = 0,int colStart=0,int colEnd=-1)
         {
             List<string> header = new List<string>();
 
             //first row is header as default
             IRow headerRow = sheet.GetRow(sheet.FirstRowNum + headerOffset);
-            for(int i=headerRow.FirstCellNum+colOffset;i<headerRow.LastCellNum;++i)
+            int l = colEnd < 1 ? headerRow.LastCellNum : (colEnd < headerRow.LastCellNum ? colEnd : headerRow.LastCellNum);
+            for(int i=headerRow.FirstCellNum+colStart;i<l;++i)
             {
                 header.Add(headerRow.GetCell(i).StringCellValue);
             }
@@ -54,6 +55,8 @@ namespace TK.ExcelData
                     return GetCompositeValue(cell, dataType);
                 case TypeInfo.Sign.Generic:
                     return GetGenericValue(cell, dataType);
+                case TypeInfo.Sign.Object:
+                    return GetObjectValue(cell, dataType);
                 default:
                     break;
             }
@@ -188,6 +191,24 @@ namespace TK.ExcelData
             }
         }
 
+        public static object GetObjectValue(ICell cell, TypeInfo type)
+        {
+            if (IsLinkCell(cell))
+            {
+                return ReadLinkHelper.ReadLinkObject(cell,type);
+            }
+            else
+            {
+                //as json data
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+            }
+        }
+
+        /// <summary>
+        /// 格式：__XXX;xxx!A1F12;xxx!1F1;xxx!A1,2;xxx!,D2
+        /// </summary>
+        /// <param name="cell"></param>
+        /// <returns></returns>
         public static bool IsLinkCell(ICell cell)
         {
             return cell.StringCellValue.StartsWith("__") || cell.StringCellValue.IndexOf("!")>-1;
@@ -216,7 +237,7 @@ namespace TK.ExcelData
             return data;
         }
 
-        static Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields, int colStartOffset)
+        static Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields, int colStart,int colEnd=-1)
         {
             if (headerFields == null || headerFields.Count == 0) return null;
 
@@ -224,9 +245,9 @@ namespace TK.ExcelData
             int index = 0;
 
             Field field;
-
+            int l = colEnd < 1 ? row.LastCellNum : (colEnd < row.LastCellNum ? colEnd : row.LastCellNum);
             //offset 相对于0开始，excel最左边一列不能为空
-            for (int i = row.FirstCellNum + colStartOffset; i < row.LastCellNum; ++i)
+            for (int i = row.FirstCellNum + colStart; i < l; ++i)
             {
                 field = headerFields[index];
                 data[field.name] = GetCellValue(row.GetCell(i), field.type);
@@ -235,50 +256,30 @@ namespace TK.ExcelData
 
             return data;
         }
-
-        static Dictionary<string, object> ReadRowDataFromColIndex(IRow row, List<Field> headerFields, int colStartIndex)
-        {
-            if (headerFields == null || headerFields.Count == 0) return null;
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            int index = 0;
-
-            Field field;
-
-            for (int i = colStartIndex; i < row.LastCellNum; ++i)
-            {
-                field = headerFields[index];
-                data[field.name] = GetCellValue(row.GetCell(i), field.type);
-                ++index;
-            }
-
-            return data;
-        }
-
         #endregion
 
         #region list
         public static List<object> ReadList(ISheet sheet, Schema schema)
         {
-            return ReadList(sheet, schema, Constance.SchemaDataRow, -1,0, null);
+            return ReadList(sheet, schema, Constance.SchemaDataRow, -1,0, -1,null);
         }
 
         public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart)
         {
-            return ReadList(sheet, schema, dataStart, -1,0, null);
+            return ReadList(sheet, schema, dataStart, -1,0,-1, null);
         }
 
         public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart,int dataEnd)
         {
-            return ReadList(sheet, schema, dataStart, dataEnd,0, null);
+            return ReadList(sheet, schema, dataStart, dataEnd,0, -1,null);
         }
 
-        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart, int dataEnd, int colStartOffset, List<string> header)
+        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart, int dataEnd, int colStart, int colEnd, List<string> header)
         {
 
             if (header == null || header.Count == 0)
             {
-                header = ReadHelper.GetHeader(sheet, 0, colStartOffset);
+                header = ReadHelper.GetHeader(sheet, 0, colStart,colEnd);
             }
 
             List<Field> headerFields = ReadHelper.PrepareHeaderFields(header, schema);
@@ -287,7 +288,7 @@ namespace TK.ExcelData
             int l = dataEnd <= 0 ? sheet.LastRowNum :(dataEnd < sheet.LastRowNum ? dataEnd : sheet.LastRowNum);
             for (int i = sheet.FirstRowNum + dataStart; i <= l; ++i)
             {
-                Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStartOffset);
+                Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStart,colEnd);
                 list.Add(record);
             }
             return list;
@@ -299,20 +300,20 @@ namespace TK.ExcelData
 
         public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema)
         {
-            return ReadDictionary(sheet, schema, "", Constance.SchemaDataRow, 0, null);
+            return ReadDictionary(sheet, schema, "", Constance.SchemaDataRow, 0, -1,null);
         }
 
         public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField)
         {
-            return ReadDictionary(sheet, schema, keyField, Constance.SchemaDataRow, 0, null);
+            return ReadDictionary(sheet, schema, keyField, Constance.SchemaDataRow, 0, -1,null);
         }
 
-        public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStart, int colStartOffset, List<string> header, bool removeKeyInElement = false)
+        public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStart, int colStart, int colEnd, List<string> header, bool removeKeyInElement = false, int dataEnd=-1)
         {
 
             if (header == null || header.Count == 0)
             {
-                header = ReadHelper.GetHeader(sheet, 0, colStartOffset);
+                header = ReadHelper.GetHeader(sheet, 0, colStart,colEnd);
             }
 
             List<Field> headerFields = ReadHelper.PrepareHeaderFields(header, schema);
@@ -324,10 +325,10 @@ namespace TK.ExcelData
             }
 
             Dictionary<string, object> dict = new Dictionary<string, object>();
-
-            for (int i = sheet.FirstRowNum + dataStart; i <= sheet.LastRowNum; ++i)
+            int l = dataEnd <= 0 ? sheet.LastRowNum : (dataEnd < sheet.LastRowNum ? dataEnd : sheet.LastRowNum);
+            for (int i = sheet.FirstRowNum + dataStart; i <= l; ++i)
             {
-                Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStartOffset);
+                Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStart,colEnd);
                 string key = record[keyField].ToString();
                 dict[key] = record;
                 if (removeKeyInElement)
