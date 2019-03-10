@@ -32,40 +32,7 @@ namespace TK.ExcelData
 
         string GetFieldTypeDefine(Field field)
         {
-            string typeDefine = "object";
-
-            switch (field.type.sign)
-            {
-                case TypeInfo.Sign.String:
-                    typeDefine = "string";
-                    break;
-                case TypeInfo.Sign.Int:
-                    typeDefine = "int";
-                    break;
-                case TypeInfo.Sign.Float:
-                    typeDefine = "float";
-                    break;
-                case TypeInfo.Sign.Array:
-                    typeDefine = "object []";
-                    break;
-                case TypeInfo.Sign.List:
-                    typeDefine = "List<object>";
-                    break;
-                case TypeInfo.Sign.Dictionary:                    
-                    typeDefine = "Dictionary<string,object>";
-                    break;
-                case TypeInfo.Sign.Long:
-                    typeDefine = "long";
-                    break;
-                case TypeInfo.Sign.Double:
-                    typeDefine = "double";
-                    break;
-                case TypeInfo.Sign.Generic:
-                    typeDefine = field.type.ToString();
-                    break;
-            }
-
-            return typeDefine;
+            return field.type.ToString();
         }
         /// <summary>
         /// 

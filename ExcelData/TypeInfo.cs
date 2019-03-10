@@ -66,7 +66,26 @@ namespace TK.ExcelData
 
         public override string ToString()
         {
-            return name;
+            if (!isGeneric)
+            {
+                return name;
+            }
+            else
+            {
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append(genericType.name);
+                sb.Append("<");
+                for(int i=0,l= _genericArguments.Count; i < l; ++i)
+                {
+                    if (i != 0)
+                    {
+                        sb.Append(",");
+                    }
+                    sb.Append(_genericArguments[i].ToString());
+                }
+                sb.Append(">");
+                return sb.ToString();
+            }
         }
 
         public static TypeInfo Int = new TypeInfo("int",Sign.Int);
@@ -74,7 +93,7 @@ namespace TK.ExcelData
         public static TypeInfo Float = new TypeInfo("float",Sign.Float);
         public static TypeInfo Double = new TypeInfo("double",Sign.Double);
         public static TypeInfo String = new TypeInfo("string",Sign.String);
-        public static TypeInfo Boolean = new TypeInfo("boolean",Sign.Boolean);
+        public static TypeInfo Boolean = new TypeInfo("bool",Sign.Boolean);
         public static TypeInfo Object = new TypeInfo("object",Sign.Object);
         public static TypeInfo Array = new TypeInfo("Array",Sign.Array);
         public static TypeInfo List = new TypeInfo("List",Sign.List);
