@@ -32,6 +32,15 @@ namespace TK.ExcelData
 
         string GetFieldTypeDefine(Field field)
         {
+            
+            if (field.type.sign == TypeInfo.Sign.Array)
+            {
+                return "object[]";
+            }
+            else if (field.type.isGeneric && field.type.genericType.sign == TypeInfo.Sign.Array)
+            {
+                return field.type.genericArguments[0].ToString() + "[]";
+            }
             return field.type.ToString();
         }
         /// <summary>

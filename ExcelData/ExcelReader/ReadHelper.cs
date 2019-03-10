@@ -37,24 +37,29 @@ namespace TK.ExcelData
             switch (dataType.sign)
             {
                 case TypeInfo.Sign.Int:
-                    return ReadHelper.GetIntValue(cell);
+                    return GetIntValue(cell);
                 case TypeInfo.Sign.Float:
-                    return ReadHelper.GetFloatValue(cell);
+                    return GetFloatValue(cell);
                 case TypeInfo.Sign.Long:
-                    return ReadHelper.GetLongValue(cell);
+                    return GetLongValue(cell);
                 case TypeInfo.Sign.Double:
-                    return ReadHelper.GetDoubleValue(cell);
+                    return GetDoubleValue(cell);
                 case TypeInfo.Sign.Boolean:
-                    return ReadHelper.GetBoolValue(cell);
+                    return GetBoolValue(cell);
                 case TypeInfo.Sign.String:
-                    return ReadHelper.GetStringValue(cell);
+                    return GetStringValue(cell);
                 case TypeInfo.Sign.Array:
+                case TypeInfo.Sign.List:
+                case TypeInfo.Sign.Dictionary:
+                    return GetCompositeValue(cell, dataType);
+                case TypeInfo.Sign.Generic:
+                    return GetGenericValue(cell, dataType);
                 default:
                     break;
             }
             return null;
         }
-
+        
         public static int GetIntValue(ICell cell)
         {
             switch (cell.CellType)
@@ -136,6 +141,57 @@ namespace TK.ExcelData
                     return cell.StringCellValue;
             }
         }
+
+        public static object GetCompositeValue(ICell cell, TypeInfo type)
+        {
+            if (IsLinkCell(cell))
+            {
+                switch (type.sign)
+                {
+                    case TypeInfo.Sign.Array:
+                        return ReadLinkHelper.ReadLinkArray(cell, TypeInfo.Object);
+                    case TypeInfo.Sign.List:
+                        return ReadLinkHelper.ReadLinkList(cell, TypeInfo.Object);
+                    case TypeInfo.Sign.Dictionary:
+                        return ReadLinkHelper.ReadLinkDict(cell, null);
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                //as json data
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+            }
+        }
+
+        public static object GetGenericValue(ICell cell, TypeInfo type)
+        {
+            if (IsLinkCell(cell))
+            {
+                switch (type.genericType.sign)
+                {
+                    case TypeInfo.Sign.Array:
+                        return ReadLinkHelper.ReadLinkArray(cell, type.genericArguments[0]);
+                    case TypeInfo.Sign.List:
+                        return ReadLinkHelper.ReadLinkList(cell, type.genericArguments[0]);
+                    case TypeInfo.Sign.Dictionary:
+                        return ReadLinkHelper.ReadLinkDict(cell, null);
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                //as json data
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+            }
+        }
+
+        public static bool IsLinkCell(ICell cell)
+        {
+            return cell.StringCellValue.StartsWith("__") || cell.StringCellValue.IndexOf("!")>-1;
+        }
         #endregion
 
         #region row
@@ -204,15 +260,20 @@ namespace TK.ExcelData
         #region list
         public static List<object> ReadList(ISheet sheet, Schema schema)
         {
-            return ReadList(sheet, schema, Constance.SchemaDataRow, 0, null);
+            return ReadList(sheet, schema, Constance.SchemaDataRow, -1,0, null);
         }
 
-        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStartOffset)
+        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart)
         {
-            return ReadList(sheet, schema, dataStartOffset, 0, null);
+            return ReadList(sheet, schema, dataStart, -1,0, null);
         }
 
-        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStartOffset, int colStartOffset, List<string> header)
+        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart,int dataEnd)
+        {
+            return ReadList(sheet, schema, dataStart, dataEnd,0, null);
+        }
+
+        public static List<object> ReadList(ISheet sheet, Schema schema, int dataStart, int dataEnd, int colStartOffset, List<string> header)
         {
 
             if (header == null || header.Count == 0)
@@ -223,8 +284,8 @@ namespace TK.ExcelData
             List<Field> headerFields = ReadHelper.PrepareHeaderFields(header, schema);
 
             List<object> list = new List<object>();
-
-            for (int i = sheet.FirstRowNum + dataStartOffset; i <= sheet.LastRowNum; ++i)
+            int l = dataEnd <= 0 ? sheet.LastRowNum :(dataEnd < sheet.LastRowNum ? dataEnd : sheet.LastRowNum);
+            for (int i = sheet.FirstRowNum + dataStart; i <= l; ++i)
             {
                 Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStartOffset);
                 list.Add(record);
@@ -246,7 +307,7 @@ namespace TK.ExcelData
             return ReadDictionary(sheet, schema, keyField, Constance.SchemaDataRow, 0, null);
         }
 
-        public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStartOffset, int colStartOffset, List<string> header, bool removeKeyInElement = false)
+        public static Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStart, int colStartOffset, List<string> header, bool removeKeyInElement = false)
         {
 
             if (header == null || header.Count == 0)
@@ -264,7 +325,7 @@ namespace TK.ExcelData
 
             Dictionary<string, object> dict = new Dictionary<string, object>();
 
-            for (int i = sheet.FirstRowNum + dataStartOffset; i <= sheet.LastRowNum; ++i)
+            for (int i = sheet.FirstRowNum + dataStart; i <= sheet.LastRowNum; ++i)
             {
                 Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStartOffset);
                 string key = record[keyField].ToString();
