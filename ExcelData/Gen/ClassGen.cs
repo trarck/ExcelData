@@ -3,7 +3,7 @@ using System.IO;
 
 namespace TK.ExcelData
 {
-    public abstract class CodeGen
+    public abstract class ClassGen
     {
         protected string m_CRLF = "\r\n";  
         protected int m_PropertyPad = 4;

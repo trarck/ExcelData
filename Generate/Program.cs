@@ -73,7 +73,7 @@ namespace Generate
 
         static void GenCSharpClass(Schema schema, string savePath, string genNamespace = "")
         {
-            CodeGen gen = new CSharpGen();
+            ClassGen gen = new CSharpClassGen();
             gen.Init(Path.Combine(Directory.GetCurrentDirectory(),"ExcelData/Gen/Templates/CSharpClass.ts"));
 
             gen.ns = genNamespace;

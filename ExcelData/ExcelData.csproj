@@ -67,11 +67,12 @@
   <ItemGroup>
     <Compile Include="DataSerializer\ISerializer.cs" />
     <Compile Include="ExcelReader\IDataReader.cs" />
-    <Compile Include="Gen\CSharpGen.cs" />
+    <Compile Include="Gen\CSharpUnityClassGen.cs" />
+    <Compile Include="Gen\CSharpClassGen.cs" />
     <Compile Include="Gen\DataGen.cs" />
     <Compile Include="Gen\XmlDataGen.cs" />
     <Compile Include="Gen\JsonDataGen.cs" />
-    <Compile Include="Gen\CodeGen.cs" />
+    <Compile Include="Gen\ClassGen.cs" />
     <Compile Include="Define.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="TypeInfo.cs" />
@@ -87,6 +88,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

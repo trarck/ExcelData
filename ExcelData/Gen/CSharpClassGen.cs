@@ -3,7 +3,7 @@ using System.IO;
 
 namespace TK.ExcelData
 {
-    public class CSharpGen:CodeGen
+    public class CSharpClassGen:ClassGen
     {
         /// <summary>
         /// 
