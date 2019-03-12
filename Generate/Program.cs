@@ -73,11 +73,11 @@ namespace Generate
 
         static void GenCSharpClass(Schema schema, string savePath, string genNamespace = "")
         {
-            ClassGen gen = new CSharpClassGen();
-            gen.Init(Path.Combine(Directory.GetCurrentDirectory(),"ExcelData/Gen/Templates/CSharpClass.ts"));
-
-            gen.ns = genNamespace;
-            gen.Generate(schema, savePath);
+            ClassCodeGen codeGen = new ClassCodeGen();
+            codeGen.Init();
+            codeGen.inputFile = Path.Combine(Directory.GetCurrentDirectory(), "ExcelData/CodeGen/Templates/UnityCSharpClass.tt");
+            string outFile = Path.Combine(savePath, schema.name+ ".cs");
+            codeGen.Generate(schema, outFile, genNamespace);
         }
 
 
