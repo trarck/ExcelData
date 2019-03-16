@@ -16,6 +16,9 @@ namespace TK.ExcelData
         public string inputFile { get; set; }
         public string preprocessClassName { get; set; }
 
+        public Schema schema { get; set; }
+        public string ns { get; set; }
+
         public void Init()
         {
             m_Generator =new CodeGenTemplateGenerator();
@@ -23,7 +26,22 @@ namespace TK.ExcelData
             m_Generator.Refs.Add(typeof(Enumerable).Assembly.Location);
         }
 
+        private void SynicSession()
+        {
+            AddSession("ns", ns);
+            AddSession("schema", schema);
+        }
+
         public void Generate(Schema schema,string outputFile,string ns=null)
+        {
+            this.schema = schema;
+            this.ns = ns;
+            SynicSession();
+
+            Generate(outputFile);
+        }
+
+        public void Generate( string outputFile)
         {
             string inputContent = null;
             string outputContent = null;
@@ -36,7 +54,7 @@ namespace TK.ExcelData
                 }
                 catch (IOException ex)
                 {
-                   throw new Exception("Could not read input file '" + inputFile + "':\n" + ex);
+                    throw new Exception("Could not read input file '" + inputFile + "':\n" + ex);
                 }
             }
 
@@ -44,9 +62,6 @@ namespace TK.ExcelData
             {
                 throw new Exception("Input is empty");
             }
-            ITextTemplatingSession session = m_Generator.CreateSession();
-            session["ns"] = ns;
-            session["schema"] = schema;
 
             if (!m_Generator.Errors.HasErrors)
             {
@@ -69,6 +84,13 @@ namespace TK.ExcelData
             {
                 if (!m_Generator.Errors.HasErrors)
                 {
+                    //check file directory exists
+                    string folder = Path.GetDirectoryName(outputFile);
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
                     File.WriteAllText(outputFile, outputContent, Encoding.UTF8);
                 }
             }
@@ -79,6 +101,7 @@ namespace TK.ExcelData
 
             LogErrors(m_Generator);
         }
+
 
         public void AddSession(string key,object value)
         {

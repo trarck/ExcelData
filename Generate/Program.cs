@@ -1,98 +1,78 @@
 ﻿using System;
 using System.IO;
-using NPOI.SS.UserModel;
+using System.Collections.Generic;
 using TK.ExcelData;
-
+using TK.Options;
 namespace Generate
 {
     class Program
     {
-       
+        static OptionSet optionSet;
+
         static void Main(string[] args)
         {
-            string excelFile = null;
-            string classOutPath = null;
+            string excelDir = null;
+            string codeOutPath = null;
             string dataOutPath = null;
+            string codeNamespace = "";
+            string exportInfo = null;
+            List<string> codeFomates = new List<string>();
+            List<string> dataFomates = new List<string>();
 
-            if (args.Length == 0)
+            optionSet = new OptionSet() {
+                { "excelDir=", "Excel folder path", s => excelDir = s },
+                { "codeOutDir=", "The code out folder", s => codeOutPath = s },
+                { "dataOutPath=", "The data out folder", s => dataOutPath=s },
+                { "codeNamespace=", "The code namspace", s => codeNamespace=s },
+                { "codeFomate=", "Code language[CSharp,Cpp,Lua,Javascript]", s => codeFomates.Add (s) },
+                { "dataFomate=", "Aata type [Json,Xml,Binary,LuaTable,UnityScriptable]", s => dataFomates.Add (s) },
+                { "exportInfo=", "The last export info.", s => exportInfo=s }
+            };
+
+            optionSet.Parse(args);
+
+            if (!Path.IsPathRooted(excelDir))
             {
-                Console.WriteLine("cmd excelFile outPath");
-            }
-            else if (args.Length == 1)
-            {
-                excelFile = args[0];
-                classOutPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Class");
-                dataOutPath = Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Data");
-            }
-            else if (args.Length == 2)
-            {
-                excelFile = args[0];
-                classOutPath = Path.Combine(args[1], "Class");
-                dataOutPath = Path.Combine(args[1], "Data");
-            }
-            else
-            {
-                excelFile = args[0];
-                classOutPath = args[1];
-                dataOutPath = args[2];
+                excelDir = Path.Combine(Directory.GetCurrentDirectory(), excelDir);
             }
 
-           string workPath = System.IO.Directory.GetCurrentDirectory();
-           GenWorkbook(Path.Combine(workPath, excelFile), Path.Combine(workPath, classOutPath), Path.Combine(workPath, dataOutPath));
-        }
-
-        static void GenWorkbook(string excelFile,string classOutPath,string dataOutPath)
-        {
-            IWorkbook workbook = ExcelHelper.Load(excelFile);
-            if (workbook != null)
+            if (!Path.IsPathRooted(codeOutPath))
             {
-                for (int i = 0; i < workbook.NumberOfSheets; ++i)
-                {
-                    ISheet sheet = workbook.GetSheetAt(i);
-                    if (ExcelHelper.NeedExport(sheet))
-                    {
-                        GenSheet(sheet, classOutPath, dataOutPath,ExcelHelper.GetExportName(sheet));
-                    }
-                }
+                codeOutPath = Path.Combine(Directory.GetCurrentDirectory(), codeOutPath);
             }
-            else
+
+            if (!Path.IsPathRooted(dataOutPath))
             {
-                Console.WriteLine("Open " + excelFile + " fail");
+                dataOutPath = Path.Combine(Directory.GetCurrentDirectory(), dataOutPath);
             }
-        }
 
-        static void GenSheet(ISheet sheet, string classOutPath,string dataOutPath, string schemaName,string genNamespace="")
-        {
-            Schema schema = SchemaReader.ReadSchema(sheet);
-            schema.name = schemaName;
+            if(!string.IsNullOrEmpty(exportInfo) && !Path.IsPathRooted(exportInfo))
+            {
+                exportInfo = Path.Combine(Directory.GetCurrentDirectory(), exportInfo);
+            }
 
-            GenCSharpClass(schema, classOutPath, genNamespace);
+            ExportSetting setting = new ExportSetting();
+            ExcelExport export = new ExcelExport(setting);
+            export.excelFolderPath = excelDir;
+            export.codeOutFolderPath = codeOutPath;
+            export.dataOutFolderPath = dataOutPath;
+            export.codeNamespace = codeNamespace;
+            ExcelExport.CodeFomate codeFomate = ExcelExport.CodeFomate.None;
+            foreach (string fomate in codeFomates)
+            {
+                codeFomate |= (ExcelExport.CodeFomate)Enum.Parse(typeof(ExcelExport.CodeFomate), fomate);
+            }
+            export.codeFomate = codeFomate;
 
-            GenJsonData(sheet, schema, dataOutPath);
-        }
+            ExcelExport.DataFomate dataFomate = ExcelExport.DataFomate.None;
+            foreach (string fomate in dataFomates)
+            {
+                dataFomate |= (ExcelExport.DataFomate)Enum.Parse(typeof(ExcelExport.DataFomate), fomate);
+            }
+            export.dataFomate = dataFomate;
 
-        static void GenCSharpClass(Schema schema, string savePath, string genNamespace = "")
-        {
-            ClassCodeGen codeGen = new ClassCodeGen();
-            codeGen.Init();
-            codeGen.inputFile = Path.Combine(Directory.GetCurrentDirectory(), "ExcelData/CodeGen/Templates/UnityCSharpClass.tt");
-            string outFile = Path.Combine(savePath, schema.name+ ".cs");
-            codeGen.Generate(schema, outFile, genNamespace);
-        }
-
-
-        static void GenJsonData(ISheet sheet,Schema schema, string savePath)
-        {
-            DataGen gen = new JsonDataGen();
-
-            gen.Generate(sheet,schema, savePath);
-        }
-
-        static void GenXmlData(ISheet sheet, Schema schema, string savePath)
-        {
-            DataGen gen = new XmlDataGen();
-
-            gen.Generate(sheet, schema, savePath);
+            export.exportInfoFile = exportInfo;
+            export.Start();
         }
     }
 }

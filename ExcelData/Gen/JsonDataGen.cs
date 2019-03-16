@@ -12,17 +12,16 @@ namespace TK.ExcelData
             base.Init();
         }
 
-        public override void Generate(ISheet sheet,Schema schema, string outPath)
+        public override void Generate(ISheet sheet,Schema schema, string outputFile)
         {
             object list = ReadHelper.ReadList(sheet, schema);
 
-            string tableName = schema.name;
-            if (!Directory.Exists(outPath))
+            string folder = Path.GetDirectoryName(outputFile);
+            if (!Directory.Exists(folder))
             {
-                Directory.CreateDirectory(outPath);
+                Directory.CreateDirectory(folder);
             }
-            string filename = Path.Combine(outPath, tableName + m_ExportExt);
-            SaveToJsonFile(filename, list);
+            SaveToJsonFile(outputFile, list);
         }
 
         void SaveToJsonFile(string jsonfile, object data)

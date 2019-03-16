@@ -259,6 +259,8 @@
     <Compile Include="CodeGen\TemplateGenerator.cs" />
     <Compile Include="DataSerializer\ISerializer.cs" />
     <Compile Include="ExcelReader\IDataReader.cs" />
+    <Compile Include="Export\ExportSetting.cs" />
+    <Compile Include="Export\ExcelExport.cs" />
     <Compile Include="Gen\CSharpUnityClassGen.cs" />
     <Compile Include="Gen\CSharpClassGen.cs" />
     <Compile Include="Gen\DataGen.cs" />
