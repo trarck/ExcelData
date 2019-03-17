@@ -6,14 +6,6 @@ namespace TK.ExcelData
 {
     public class ReadLinkHelper
     {
-        public struct CellPosition
-        {
-            public int colStart;
-            public int colEnd;
-            public int rowStart;
-            public int rowEnd;
-        }
-
         /// <summary>
         /// 解析出目标位置
         /// A1B2;A1,B2;A1,2;1,B2;1,2
@@ -123,13 +115,13 @@ namespace TK.ExcelData
             return cp;
         }
 
-        static string ParseLinkCell(ICell cell, out CellPosition cp)
+        public static string ParseLinkCell(ICell cell, out CellPosition cp)
         {
             string key;
             return ParseLinkCell(cell, out cp, out key);
         }
 
-        static string ParseLinkCell(ICell cell, out CellPosition start,out string key)
+        public static string ParseLinkCell(ICell cell, out CellPosition start,out string key)
         {
             string linkWhere = cell.StringCellValue;
 
@@ -173,96 +165,6 @@ namespace TK.ExcelData
             }
 
             return linkSheetName;
-        }
-        
-        static List<T> ReadList<T>(ISheet sheet, int colIndex, int startRow, int endRow, TypeInfo dataType)
-        {
-            List<T> list = new List<T>();
-            int l = endRow <= 0 ? sheet.LastRowNum : (endRow < sheet.LastRowNum ? endRow : sheet.LastRowNum);
-            for (int i = sheet.FirstRowNum + startRow; i <= l; ++i)
-            {
-                IRow row = sheet.GetRow(i);
-                ICell cell = row.GetCell(row.FirstCellNum + colIndex);
-                list.Add((T)ReadHelper.GetCellValue(cell, dataType));
-            }
-            return list;
-        }
-
-        static object ReadListData(ISheet sheet, int colIndex, int startRow, int endRow, TypeInfo t)
-        {
-            switch (t.sign)
-            {
-                case TypeInfo.Sign.Int:
-                    return ReadList<int>(sheet, colIndex,startRow, endRow, t);
-                case TypeInfo.Sign.Float:
-                    return ReadList<float>(sheet, colIndex, startRow, endRow, t);
-                case TypeInfo.Sign.Long:
-                    return ReadList<long>(sheet, colIndex, startRow, endRow, t);
-                case TypeInfo.Sign.Double:
-                    return ReadList<double>(sheet, colIndex, startRow, endRow, t);
-                case TypeInfo.Sign.Boolean:
-                    return ReadList<bool>(sheet, colIndex, startRow, endRow, t);
-                case TypeInfo.Sign.String:
-                    return ReadList<string>(sheet, colIndex, startRow, endRow, t);
-                default:
-                    Schema schema = SchemaReader.ReadSchema(sheet);
-                    return ReadHelper.ReadList(sheet, schema,startRow,endRow);
-            }
-        }
-
-        public static object ReadLinkList(ICell cell, TypeInfo t)
-        {
-            if (cell == null || cell.StringCellValue=="") return null;
-
-            string linkWhere = cell.StringCellValue;
-            CellPosition cp;
-            string linkSheetName = ParseLinkCell(cell, out cp);            
-
-            ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
-
-            return ReadListData(linkSheet, cp.colStart, cp.rowStart,cp.rowEnd, t);
-        }
-                
-        public static object ReadLinkArray(ICell cell, TypeInfo t)
-        {
-            return ReadLinkList(cell, t); ;
-        }
-
-        public static object ReadLinkDict(ICell cell, string keyField=null,bool removeKeyFieldInElement=false)
-        {
-            if (cell == null || cell.StringCellValue == "") return null;
-            string linkWhere = cell.StringCellValue;
-            CellPosition cp;
-            string cellKey;
-            string linkSheetName = ParseLinkCell(cell, out cp,out cellKey);
-            if (string.IsNullOrEmpty(keyField))
-            {
-                keyField = cellKey;
-            }
-
-            ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
-            Schema schema = SchemaReader.ReadSchema(linkSheet);
-
-            //内容要跳过头
-            return ReadHelper.ReadDictionary(linkSheet, schema, keyField,cp.rowStart,cp.colStart,cp.colEnd+1,null, removeKeyFieldInElement,cp.rowEnd);
-        }
-
-        public static object ReadLinkObject(ICell cell, TypeInfo t)
-        {
-            if (cell == null || cell.StringCellValue == "") return null;
-            string linkWhere = cell.StringCellValue;
-            CellPosition cp;
-            string linkSheetName = ParseLinkCell(cell, out cp);
-            if (cp.rowEnd <= 0)
-            {
-                cp.rowEnd = cp.rowStart;
-            }
-
-            ISheet linkSheet = cell.Sheet.Workbook.GetSheet(linkSheetName);
-            Schema schema = SchemaReader.ReadSchema(linkSheet);
-
-            //内容要跳过头
-            return ReadHelper.ReadList(linkSheet, schema, cp.rowStart, cp.rowEnd, cp.colStart,cp.colEnd+1,null)[0];
         }
     }
 }

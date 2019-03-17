@@ -53,6 +53,8 @@ namespace Export
             }
 
             ExportSetting setting = new ExportSetting();
+            setting.headModel = HeadModel.CreateNormalModel();
+
             ExcelExport export = new ExcelExport(setting);
             export.excelFolderPath = excelDir;
             export.codeOutFolderPath = codeOutPath;

@@ -12,9 +12,12 @@ namespace TK.ExcelData
             base.Init();
         }
 
-        public override void Generate(ISheet sheet,Schema schema, string outputFile)
+        public override void Generate(ISheet sheet,Schema schema, HeadModel headModel, string outputFile)
         {
-            object list = ReadHelper.ReadList(sheet, schema);
+            DataReader dataReader = new DataReader();
+            dataReader.headModel = headModel;
+
+            object list = dataReader.ReadList(sheet, schema, headModel);
 
             string folder = Path.GetDirectoryName(outputFile);
             if (!Directory.Exists(folder))

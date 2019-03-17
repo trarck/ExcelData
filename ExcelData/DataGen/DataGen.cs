@@ -21,7 +21,7 @@ namespace TK.ExcelData
 
         }
 
-        public virtual void Generate(ISheet sheet,Schema schema, string outputFile)
+        public virtual void Generate(ISheet sheet,Schema schema, HeadModel headModel, string outputFile)
         {
 
         }

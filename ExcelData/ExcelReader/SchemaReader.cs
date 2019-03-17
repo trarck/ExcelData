@@ -7,45 +7,68 @@ namespace TK.ExcelData
 {
     public class SchemaReader
     {
-        public static Schema ReadSchema(ISheet sheet, 
-                                                                int schemaNameRow= Constance.SchemaNameRow, 
-                                                                int schemaDataTypeRow = Constance.SchemaDataTypeRow,
-                                                                int schemaDescriptionRow = Constance.SchemaDescriptionRow,
-                                                                int schemaColOffset=0)
+        public static Schema ReadSchema(ISheet sheet, HeadModel headModel, int schemaColOffset = 0)
         {
             Schema schema = new Schema();
             schema.name = sheet.SheetName;
 
             //first row is name
-            IRow headerRow = sheet.GetRow(sheet.FirstRowNum + schemaNameRow);
+            IRow NameRow = sheet.GetRow(sheet.FirstRowNum + headModel.NameRow);
             //third row is data type
-            IRow typeRow = sheet.GetRow(sheet.FirstRowNum + schemaDataTypeRow);
+            IRow typeRow = sheet.GetRow(sheet.FirstRowNum + headModel.DataTypeRow);
+
+            bool haveDescription = headModel.DescriptionRow != -1;
+            bool haveSide = headModel.SideRow != -1;
             //second row is description
-            IRow descriptionRow = sheet.GetRow(sheet.FirstRowNum + schemaDescriptionRow);
-
-            for(int i = headerRow.FirstCellNum+schemaColOffset; i < headerRow.LastCellNum; ++i)
+            IRow descriptionRow = null;
+            if (haveDescription)
             {
-                ICell headCell = headerRow.GetCell(i);
-                string name = headCell.StringCellValue;
+                descriptionRow = sheet.GetRow(sheet.FirstRowNum + headModel.DescriptionRow);
+            }
 
-                ICell descriptionCell = descriptionRow.GetCell(i);
-                string description = descriptionCell.StringCellValue;
+            IRow sideRow = null;
+            if (haveSide)
+            {
+                sideRow = sheet.GetRow(sheet.FirstRowNum + headModel.SideRow);
+            }
 
+            for (int i = NameRow.FirstCellNum + schemaColOffset; i < NameRow.LastCellNum; ++i)
+            {
+                //get name
+                ICell nameCell = NameRow.GetCell(i);
+                string name = nameCell.StringCellValue;
+
+                //get type
                 TypeInfo dataType = TypeInfo.Object;
-
                 ICell typeCell = typeRow.GetCell(i);
-                if (typeCell!=null)
+                if (typeCell != null)
                 {
                     dataType = TypeInfo.Parse(typeCell.StringCellValue);
                 }
 
-                string comment = "";
-                if (headCell.CellComment != null)
+                //get description
+                string description = "";
+                if (haveDescription)
                 {
-                    comment = headCell.CellComment.String.String;
+                    ICell descriptionCell = descriptionRow.GetCell(i);
+                    description = descriptionCell.StringCellValue;
                 }
 
-                Field field = new Field(name, dataType, comment,description);
+                //get comment
+                string comment = "";
+                if (nameCell.CellComment != null)
+                {
+                    comment = nameCell.CellComment.String.String;
+                }
+
+                Side side = Side.All;
+                if (haveSide)
+                {
+                    ICell sideCell = sideRow.GetCell(i);
+                    side =(Side)System.Enum.Parse(typeof(Side),sideCell.StringCellValue);
+                }
+
+                Field field = new Field(name, dataType, comment,description, side);
                 schema.AddField(field);
             }
 

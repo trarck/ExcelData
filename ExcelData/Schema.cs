@@ -168,5 +168,18 @@ namespace TK.ExcelData
                 return m_Name;
             }
         }
+
+        public Side side
+        {
+            get
+            {
+                Side side = Side.None;
+                foreach(var field in m_Fields)
+                {
+                    side |= field.side;
+                }
+                return side;
+            }
+        }
     }
 }

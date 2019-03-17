@@ -39,6 +39,13 @@ namespace TK.ExcelData
             }
         }
 
+        private HeadModel m_HeadModel = HeadModel.CreateModel();
+        public HeadModel headModel
+        {
+            get { return m_HeadModel; }
+            set{ m_HeadModel = value; }
+        }
+
         private Dictionary<ExcelExport.CodeFomate, string> m_CodeTemplates = new Dictionary<ExcelExport.CodeFomate, string>
         {
             {ExcelExport.CodeFomate.CSharp,"ExcelData/CodeGen/Templates/UnityCSharpClass.tt" },

@@ -14,6 +14,9 @@
         //注释
         string m_Comment;
 
+        //side
+        Side m_Side;
+
         public Field()
         {
 
@@ -23,14 +26,16 @@
         {
             m_Name = name;
             m_Type = type;
+            m_Side = Side.All;
         }
         
-        public Field(string name, TypeInfo type, string comment,string description)
+        public Field(string name, TypeInfo type, string comment,string description,Side side)
         {
             m_Name = name;
             m_Type = type;
             m_Comment = comment;
             m_Description = description;
+            m_Side = side;
         }
 
         public override string ToString()
@@ -86,6 +91,18 @@
             set
             {
                 m_Description = value;
+            }
+        }
+
+        public Side side
+        {
+            get
+            {
+                return m_Side;
+            }
+            set
+            {
+                m_Side = value;
             }
         }
     }

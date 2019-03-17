@@ -158,7 +158,7 @@ namespace TK.ExcelData
 
         private ExportResult ExportSheet(ISheet sheet)
         {
-            Schema schema = SchemaReader.ReadSchema(sheet);
+            Schema schema = SchemaReader.ReadSchema(sheet,setting.headModel);
             schema.name = setting.FomateSheetName(sheet);
 
             if (codeFomate != CodeFomate.None)
@@ -184,6 +184,7 @@ namespace TK.ExcelData
             codeGen.Init();
             codeGen.schema = schema;
             codeGen.ns = codeNamespace;
+            codeGen.SynicSession();
 
             if ((codeFomate & CodeFomate.CSharp)!=0)
             {
@@ -285,7 +286,7 @@ namespace TK.ExcelData
                 savePath = Path.Combine(savePath, DataFomate.Json.ToString());
             }
             string outputFile = Path.Combine(savePath, schema.name + gen.exportExt);
-            gen.Generate(sheet, schema, outputFile);
+            gen.Generate(sheet, schema,setting.headModel, outputFile);
         }
 
         private void ExportXmlData(ISheet sheet, Schema schema)

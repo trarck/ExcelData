@@ -26,7 +26,7 @@ namespace TK.ExcelData
             m_Generator.Refs.Add(typeof(Enumerable).Assembly.Location);
         }
 
-        private void SynicSession()
+        public void SynicSession()
         {
             AddSession("ns", ns);
             AddSession("schema", schema);
