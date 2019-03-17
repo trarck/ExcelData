@@ -5,6 +5,7 @@
 <#@ import namespace="TK.ExcelData" #>
 <#@ output extension=".cs" #>
 <#@ parameter  name="ns" type="System.String" #>
+<#@ parameter  name="side" type="TK.ExcelData.Side" #>
 <#@ parameter  name="schema" type="TK.ExcelData.Schema" #>
 using UnityEngine;
 using System;
@@ -17,7 +18,7 @@ namespace <#=ns#>
 <# if(schema!=null){ #>
 public class <#= schema.name #>
 {
-<# foreach(Field field in schema.fields){ #>
+<# foreach(Field field in schema.GetSideFields(side)){ #>
     /// <summary>
     /// <#= GetFieldComment(field) #>
     /// </summary>

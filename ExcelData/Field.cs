@@ -43,6 +43,11 @@
             return string.Format("Field[{0}]--{1}",m_Name ,m_Type);
         }
 
+        public bool IsSameSide(Side side)
+        {
+            return (m_Side & side) != 0;
+        }
+
         public string name
         {
             set

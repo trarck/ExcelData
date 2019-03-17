@@ -79,6 +79,20 @@ namespace TK.ExcelData
             return null;
         }
 
+        public List<Field> GetSideFields(Side side)
+        {
+            List<Field> sideFields = new List<Field>();
+            foreach (Field field in m_Fields)
+            {
+                if (field.IsSameSide(side))
+                {
+                    sideFields.Add(field);
+                }
+            }
+
+            return sideFields;
+        }
+
         string CamelCase(string str)
         {
             if (!string.IsNullOrEmpty(str))

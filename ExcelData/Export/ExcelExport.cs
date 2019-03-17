@@ -48,6 +48,7 @@ namespace TK.ExcelData
         public CodeFomate codeFomate { get; set; }
         public DataFomate dataFomate { get; set; }
         public string exportInfoFile { get; set; }
+        public Side side { get; set; }
 
         public ExportSetting setting { get; set; }
 
@@ -182,9 +183,9 @@ namespace TK.ExcelData
         {
             ClassCodeGen codeGen = new ClassCodeGen();
             codeGen.Init();
-            codeGen.schema = schema;
-            codeGen.ns = codeNamespace;
-            codeGen.SynicSession();
+            codeGen.AddSession("ns", codeNamespace);
+            codeGen.AddSession("side", side);
+            codeGen.AddSession("schema", schema);
 
             if ((codeFomate & CodeFomate.CSharp)!=0)
             {

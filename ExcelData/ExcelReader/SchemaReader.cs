@@ -65,7 +65,10 @@ namespace TK.ExcelData
                 if (haveSide)
                 {
                     ICell sideCell = sideRow.GetCell(i);
-                    side =(Side)System.Enum.Parse(typeof(Side),sideCell.StringCellValue);
+                    if (!string.IsNullOrEmpty(sideCell.StringCellValue))
+                    {
+                        side = (Side)System.Enum.Parse(typeof(Side), sideCell.StringCellValue);
+                    }
                 }
 
                 Field field = new Field(name, dataType, comment,description, side);

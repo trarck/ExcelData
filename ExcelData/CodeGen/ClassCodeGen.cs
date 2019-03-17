@@ -34,9 +34,8 @@ namespace TK.ExcelData
 
         public void Generate(Schema schema,string outputFile,string ns=null)
         {
-            this.schema = schema;
-            this.ns = ns;
-            SynicSession();
+            AddSession("ns", ns);
+            AddSession("schema", schema);
 
             Generate(outputFile);
         }
