@@ -8,6 +8,7 @@ namespace TK.ExcelData
     public class DataReader : IDataReader
     {
         public HeadModel headModel { get; set; }
+        public Side side { get; set; }
 
         #region cell
         public object GetCellValue(ICell cell, TypeInfo dataType)
@@ -115,7 +116,10 @@ namespace TK.ExcelData
             while (iter.MoveNext() && index < headerFields.Count)
             {
                 field = headerFields[index];
-                data[field.name] = GetCellValue(iter.Current, field.type);
+                if (field.IsSameSide(side))
+                {
+                    data[field.name] = GetCellValue(iter.Current, field.type);
+                }
                 ++index;
             }
 
@@ -135,7 +139,10 @@ namespace TK.ExcelData
             for (int i = row.FirstCellNum + colStart; i < l; ++i)
             {
                 field = headerFields[index];
-                data[field.name] = GetCellValue(row.GetCell(i), field.type);
+                if (field.IsSameSide(side))
+                {
+                    data[field.name] = GetCellValue(row.GetCell(i), field.type);
+                }
                 ++index;
             }
 

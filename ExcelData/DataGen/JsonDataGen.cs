@@ -12,10 +12,11 @@ namespace TK.ExcelData
             base.Init();
         }
 
-        public override void Generate(ISheet sheet,Schema schema, HeadModel headModel, string outputFile)
+        public override void Generate(ISheet sheet,Schema schema, HeadModel headModel, Side side, string outputFile)
         {
             DataReader dataReader = new DataReader();
             dataReader.headModel = headModel;
+            dataReader.side = side;
 
             object list = dataReader.ReadList(sheet, schema, headModel);
 

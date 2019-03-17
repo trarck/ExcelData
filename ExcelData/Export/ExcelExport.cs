@@ -287,7 +287,7 @@ namespace TK.ExcelData
                 savePath = Path.Combine(savePath, DataFomate.Json.ToString());
             }
             string outputFile = Path.Combine(savePath, schema.name + gen.exportExt);
-            gen.Generate(sheet, schema,setting.headModel, outputFile);
+            gen.Generate(sheet, schema,setting.headModel,side, outputFile);
         }
 
         private void ExportXmlData(ISheet sheet, Schema schema)
