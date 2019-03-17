@@ -10,7 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generate", "Generate\Genera
 		{488BC83B-4B21-4030-A033-9E7F54AF0DE0} = {488BC83B-4B21-4030-A033-9E7F54AF0DE0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1CDD2654-E60D-4814-937E-7121386B1AE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{1CDD2654-E60D-4814-937E-7121386B1AE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export", "Export\Export.csproj", "{56C0AC93-3727-4557-8459-95EC62B74B5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,10 @@ Global
 		{1CDD2654-E60D-4814-937E-7121386B1AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CDD2654-E60D-4814-937E-7121386B1AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CDD2654-E60D-4814-937E-7121386B1AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C0AC93-3727-4557-8459-95EC62B74B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C0AC93-3727-4557-8459-95EC62B74B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C0AC93-3727-4557-8459-95EC62B74B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C0AC93-3727-4557-8459-95EC62B74B5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

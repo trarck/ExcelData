@@ -3,7 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using TK.ExcelData;
 using TK.Options;
-namespace Generate
+
+namespace Export
 {
     class Program
     {
@@ -46,7 +47,7 @@ namespace Generate
                 dataOutPath = Path.Combine(Directory.GetCurrentDirectory(), dataOutPath);
             }
 
-            if(!string.IsNullOrEmpty(exportInfo) && !Path.IsPathRooted(exportInfo))
+            if (!string.IsNullOrEmpty(exportInfo) && !Path.IsPathRooted(exportInfo))
             {
                 exportInfo = Path.Combine(Directory.GetCurrentDirectory(), exportInfo);
             }

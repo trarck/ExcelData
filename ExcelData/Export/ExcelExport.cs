@@ -60,6 +60,11 @@ namespace TK.ExcelData
 
         public void Start()
         {
+            if (!Directory.Exists(excelFolderPath))
+            {
+                return;
+            }
+
             string[] excelFiles = Directory.GetFiles(excelFolderPath, "*.xls", SearchOption.AllDirectories);
             if(excelFiles==null || excelFiles.Length == 0)
             {
