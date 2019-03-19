@@ -7,7 +7,7 @@ using System.Text;
 
 namespace TK.ExcelData
 {
-    public class ExcelExport
+    public class ExcelSerializer
     {
         public string excelFolderPath { get; set; }
         public string codeOutFolderPath{get;set;}
@@ -22,7 +22,7 @@ namespace TK.ExcelData
 
         private Dictionary<string, ExportInfo> m_ExportInfos;
 
-        public ExcelExport(ExportSetting setting)
+        public ExcelSerializer(ExportSetting setting)
         {
             this.setting = setting;
         }
@@ -101,6 +101,36 @@ namespace TK.ExcelData
             {
                 SaveExportInfo(exportInfoFile, m_ExportInfos);
             }
+        }
+
+        private void AnalyzeExcelFiles(string[] excelFiles)
+        {
+            foreach (var excelFile in excelFiles)
+            {
+                IWorkbook workbook = ExcelHelper.Load(excelFile);
+                AnalyzeWorkbook(workbook);
+                if (workbook != null)
+                {
+
+                }
+            }
+        }
+
+        private void AnalyzeWorkbook(IWorkbook workbook)
+        {
+            if (workbook != null)
+            {
+                for (int i = 0; i < workbook.NumberOfSheets; ++i)
+                {
+                    ISheet sheet = workbook.GetSheetAt(i);
+                    AnalyzeSheet(sheet);
+                }
+            }
+        }
+
+        private void AnalyzeSheet(ISheet sheet)
+        {
+
         }
 
         public ExportResult Export(string excelFilePath)

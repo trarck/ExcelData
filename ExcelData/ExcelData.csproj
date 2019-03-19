@@ -257,8 +257,11 @@
     <Compile Include="CodeGen\CodeGenTemplateGenerator.cs" />
     <Compile Include="CodeGen\CodeGenTemplateSession.cs" />
     <Compile Include="CodeGen\TemplateGenerator.cs" />
+    <Compile Include="DataSerializer\BinarySerializer.cs" />
     <Compile Include="DataSerializer\ISerializer.cs" />
     <Compile Include="ExcelReader\CellPosition.cs" />
+    <Compile Include="Export\ExcelSerializer.cs" />
+    <Compile Include="Export\ExportDefine.cs" />
     <Compile Include="HeadModel.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="ExcelReader\IDataReader.cs" />
