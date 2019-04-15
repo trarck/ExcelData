@@ -81,17 +81,17 @@ namespace Export
             export.codeNamespace = codeNamespace;
             export.side = side;
 
-            ExcelExport.CodeFomate codeFomate = ExcelExport.CodeFomate.None;
+            CodeFomate codeFomate = CodeFomate.None;
             foreach (string fomate in codeFomates)
             {
-                codeFomate |= (ExcelExport.CodeFomate)Enum.Parse(typeof(ExcelExport.CodeFomate), fomate);
+                codeFomate |= (CodeFomate)Enum.Parse(typeof(CodeFomate), fomate);
             }
             export.codeFomate = codeFomate;
 
-            ExcelExport.DataFomate dataFomate = ExcelExport.DataFomate.None;
+            DataFomate dataFomate = DataFomate.None;
             foreach (string fomate in dataFomates)
             {
-                dataFomate |= (ExcelExport.DataFomate)Enum.Parse(typeof(ExcelExport.DataFomate), fomate);
+                dataFomate |= (DataFomate)Enum.Parse(typeof(DataFomate), fomate);
             }
             export.dataFomate = dataFomate;
 
