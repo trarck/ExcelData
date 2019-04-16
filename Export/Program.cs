@@ -19,23 +19,44 @@ namespace Export
             string exportInfo = null;
             Side side = Side.All;
             string headModel = null;
+            string templateFolder = null;
 
-            List<string> codeFomates = new List<string>();
-            List<string> dataFomates = new List<string>();
+            List<string> codeFormats = new List<string>();
+            List<string> dataFormats = new List<string>();
 
             optionSet = new OptionSet() {
                 { "excelDir=", "Excel folder path", s => excelDir = s },
                 { "codeOutDir=", "The code out folder", s => codeOutPath = s },
                 { "dataOutPath=", "The data out folder", s => dataOutPath=s },
                 { "codeNamespace=", "The code namspace", s => codeNamespace=s },
-                { "codeFomate=", "Code language[CSharp,Cpp,Lua,Javascript]", s => codeFomates.Add (s) },
-                { "dataFomate=", "Aata type [Json,Xml,Binary,LuaTable,UnityScriptable]", s => dataFomates.Add (s) },
+                { "codeFormat=", "Code language[CSharp,Cpp,Lua,Javascript]", s => codeFormats.Add (s) },
+                { "dataFormat=", "Aata type [Json,Xml,Binary,LuaTable,UnityScriptable]", s => dataFormats.Add (s) },
                 { "exportInfo=", "The last export info.", s => exportInfo=s },
                 { "side=", "The last export info.", s => side=(Side)Enum.Parse(typeof(Side),s) },
-                { "headModel=", "The last export info.", s => headModel=s }
+                { "headModel=", "The last export info.", s => headModel=s },
+                { "templatePath=", "The last export info.", s => templateFolder=s }
             };
 
             optionSet.Parse(args);
+
+            if (string.IsNullOrEmpty(excelDir))
+            {
+                System.Console.WriteLine("Excel path is null");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(codeOutPath))
+            {
+                System.Console.WriteLine("Code out path is null");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(dataOutPath))
+            {
+                System.Console.WriteLine("Data out path is null");
+                return;
+            }
+
 
             if (!Path.IsPathRooted(excelDir))
             {
@@ -68,10 +89,15 @@ namespace Export
                     case "Simple":
                         setting.headModel = HeadModel.CreateSimpleModel();
                         break;
-                    default:
-                        //use default side
+                    default://All
+                        //use default have side
                         break;
-                }               
+                }
+            }
+
+            if (!string.IsNullOrEmpty(templateFolder))
+            {
+                setting.templateFolder = templateFolder;
             }
 
             ExcelExport export = new ExcelExport(setting);
@@ -81,19 +107,20 @@ namespace Export
             export.codeNamespace = codeNamespace;
             export.side = side;
 
-            CodeFomate codeFomate = CodeFomate.None;
-            foreach (string fomate in codeFomates)
-            {
-                codeFomate |= (CodeFomate)Enum.Parse(typeof(CodeFomate), fomate);
-            }
-            export.codeFomate = codeFomate;
 
-            DataFomate dataFomate = DataFomate.None;
-            foreach (string fomate in dataFomates)
+            CodeFomat codeFormat = CodeFomat.None;
+            foreach (string format in codeFormats)
             {
-                dataFomate |= (DataFomate)Enum.Parse(typeof(DataFomate), fomate);
+                codeFormat |= (CodeFomat)Enum.Parse(typeof(CodeFomat), format);
             }
-            export.dataFomate = dataFomate;
+            export.codeFormat = codeFormat;
+
+            DataFormat dataFormat = DataFormat.None;
+            foreach (string format in dataFormats)
+            {
+                dataFormat |= (DataFormat)Enum.Parse(typeof(DataFormat), format);
+            }
+            export.dataFormat = dataFormat;
 
             export.exportInfoFile = exportInfo;
             export.Start();

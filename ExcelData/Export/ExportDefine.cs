@@ -19,7 +19,7 @@ namespace TK.ExcelData
         Error
     }
 
-    public enum CodeFomate
+    public enum CodeFomat
     {
         None = 0,
         CSharp = 1,
@@ -28,7 +28,7 @@ namespace TK.ExcelData
         Javascript = 8
     }
 
-    public enum DataFomate
+    public enum DataFormat
     {
         None = 0,
         Json = 1,

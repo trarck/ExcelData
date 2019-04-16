@@ -82,8 +82,15 @@ namespace TK.ExcelData
             }
             else
             {
-                //as json data
-                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+                if (cell != null)
+                {
+                    //as json data
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

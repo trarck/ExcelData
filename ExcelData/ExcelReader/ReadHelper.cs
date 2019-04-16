@@ -36,83 +36,125 @@ namespace TK.ExcelData
                 
         public static int GetIntValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell != null)
             {
-                case CellType.Numeric:
-                    return (int)cell.NumericCellValue;
-                case CellType.String:
-                    return int.Parse(cell.StringCellValue);
-                case CellType.Boolean:
-                    return cell.BooleanCellValue ? 1 : 0;
-                default:
-                    throw new System.Exception("can't convert to int from " + cell.CellType);
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return (int)cell.NumericCellValue;
+                    case CellType.String:
+                        return int.Parse(cell.StringCellValue);
+                    case CellType.Boolean:
+                        return cell.BooleanCellValue ? 1 : 0;
+                    default:
+                        throw new System.Exception("can't convert to int from " + cell.CellType);
+                }
+            }
+            else
+            {
+                return 0;
             }
         }
 
         public static long GetLongValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell != null)
             {
-                case CellType.Numeric:
-                    return (long)cell.NumericCellValue;
-                case CellType.String:
-                    return long.Parse(cell.StringCellValue);
-                default:
-                    throw new System.Exception("can't convert to long from " + cell.CellType);
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return (long)cell.NumericCellValue;
+                    case CellType.String:
+                        return long.Parse(cell.StringCellValue);
+                    default:
+                        throw new System.Exception("can't convert to long from " + cell.CellType);
+                }
+            }
+            else
+            {
+                return 0;
             }
         }
 
         public static float GetFloatValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell != null)
             {
-                case CellType.Numeric:
-                    return (float)cell.NumericCellValue;
-                case CellType.String:
-                    return float.Parse(cell.StringCellValue);
-                default:
-                    throw new System.Exception("can't convert to float from " + cell.CellType);
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return (float)cell.NumericCellValue;
+                    case CellType.String:
+                        return float.Parse(cell.StringCellValue);
+                    default:
+                        throw new System.Exception("can't convert to float from " + cell.CellType);
+                }
+            }
+            else
+            {
+                return 0;
             }
         }
 
         public static double GetDoubleValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell != null)
             {
-                case CellType.Numeric:
-                    return cell.NumericCellValue;
-                case CellType.String:
-                    return double.Parse(cell.StringCellValue);
-                default:
-                    throw new System.Exception("can't convert to double from " + cell.CellType);
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return cell.NumericCellValue;
+                    case CellType.String:
+                        return double.Parse(cell.StringCellValue);
+                    default:
+                        throw new System.Exception("can't convert to double from " + cell.CellType);
+                }
+            }
+            else
+            {
+                return 0;
             }
         }
 
         public static bool GetBoolValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell != null)
             {
-                case CellType.Numeric:
-                    return cell.NumericCellValue != 0;
-                case CellType.String:
-                    return bool.Parse(cell.StringCellValue);
-                case CellType.Boolean:
-                    return cell.BooleanCellValue;
-                default:
-                    throw new System.Exception("can't convert to bool from " + cell.CellType);
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return cell.NumericCellValue != 0;
+                    case CellType.String:
+                        return bool.Parse(cell.StringCellValue);
+                    case CellType.Boolean:
+                        return cell.BooleanCellValue;
+                    default:
+                        throw new System.Exception("can't convert to bool from " + cell.CellType);
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
         public static string GetStringValue(ICell cell)
         {
-            switch (cell.CellType)
+            if (cell!=null)
             {
-                case CellType.Numeric:
-                    return cell.NumericCellValue.ToString();
-                case CellType.Boolean:
-                    return cell.BooleanCellValue.ToString();
-                default:
-                    return cell.StringCellValue;
+                switch (cell.CellType)
+                {
+                    case CellType.Numeric:
+                        return cell.NumericCellValue.ToString();
+                    case CellType.Boolean:
+                        return cell.BooleanCellValue.ToString();
+                    default:
+                        return cell.StringCellValue;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
 
@@ -123,7 +165,14 @@ namespace TK.ExcelData
         /// <returns></returns>
         public static bool IsLinkCell(ICell cell)
         {
-            return cell.StringCellValue.StartsWith("__") || cell.StringCellValue.IndexOf("!")>-1;
+            if (cell != null)
+            {
+                return cell.StringCellValue.StartsWith("__") || cell.StringCellValue.IndexOf("!") > -1;
+            }
+            else
+            {
+                return false;
+            }
         }
         #endregion
     }

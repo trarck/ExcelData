@@ -13,8 +13,8 @@ namespace TK.ExcelData
         public string codeOutFolderPath{get;set;}
         public string dataOutFolderPath { get; set; }
         public string codeNamespace { get; set; }
-        public CodeFomate codeFomate { get; set; }
-        public DataFomate dataFomate { get; set; }
+        public CodeFomat codeFormat { get; set; }
+        public DataFormat dataFormat { get; set; }
         public string exportInfoFile { get; set; }
         public Side side { get; set; }
 
@@ -158,14 +158,14 @@ namespace TK.ExcelData
         private ExportResult ExportSheet(ISheet sheet)
         {
             Schema schema = SchemaReader.ReadSchema(sheet,setting.headModel);
-            schema.name = setting.FomateSheetName(sheet);
+            schema.name = setting.FormatSheetName(sheet);
 
-            if (codeFomate != CodeFomate.None)
+            if (codeFormat != CodeFomat.None)
             {
                 GenerateCode(schema);
             }
 
-            if (dataFomate != DataFomate.None)
+            if (dataFormat != DataFormat.None)
             {
                 ExportData(sheet, schema);
             }
@@ -185,13 +185,13 @@ namespace TK.ExcelData
             codeGen.AddSession("side", side);
             codeGen.AddSession("schema", schema);
 
-            if ((codeFomate & CodeFomate.CSharp)!=0)
+            if ((codeFormat & CodeFomat.CSharp)!=0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomate.CSharp);
+                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.CSharp);
                 string outFile = null;
                 if (setting.codeUseSubPath)
                 {
-                    outFile = Path.Combine(codeOutFolderPath,CodeFomate.CSharp.ToString(), schema.name + ".cs");
+                    outFile = Path.Combine(codeOutFolderPath,CodeFomat.CSharp.ToString(), schema.name + ".cs");
                 }
                 else
                 {
@@ -202,13 +202,13 @@ namespace TK.ExcelData
                 codeGen.Generate(outFile);
             }
 
-            if ((codeFomate & CodeFomate.Cpp) != 0)
+            if ((codeFormat & CodeFomat.Cpp) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomate.Cpp);
+                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Cpp);
                 string outFile = null;
                 if (setting.codeUseSubPath)
                 {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomate.Cpp.ToString(), schema.name + ".cpp");
+                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Cpp.ToString(), schema.name + ".cpp");
                 }
                 else
                 {
@@ -217,13 +217,13 @@ namespace TK.ExcelData
                 codeGen.Generate(outFile);
             }
 
-            if ((codeFomate & CodeFomate.Lua) != 0)
+            if ((codeFormat & CodeFomat.Lua) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomate.Lua);
+                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Lua);
                 string outFile = null;
                 if (setting.codeUseSubPath)
                 {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomate.Lua.ToString(), schema.name + ".lua");
+                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Lua.ToString(), schema.name + ".lua");
                 }
                 else
                 {
@@ -232,13 +232,13 @@ namespace TK.ExcelData
                 codeGen.Generate(outFile);
             }
 
-            if ((codeFomate & CodeFomate.Javascript) != 0)
+            if ((codeFormat & CodeFomat.Javascript) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomate.Javascript);
+                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Javascript);
                 string outFile = null;
                 if (setting.codeUseSubPath)
                 {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomate.Javascript.ToString(), schema.name + ".js");
+                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Javascript.ToString(), schema.name + ".js");
                 }
                 else
                 {
@@ -250,27 +250,27 @@ namespace TK.ExcelData
 
         public void ExportData(ISheet sheet,Schema schema)
         {
-            if ((dataFomate & DataFomate.Json) != 0)
+            if ((dataFormat & DataFormat.Json) != 0)
             {
                 ExportJsonData(sheet, schema);
             }
 
-            if ((dataFomate & DataFomate.Xml) != 0)
+            if ((dataFormat & DataFormat.Xml) != 0)
             {
                 ExportXmlData(sheet, schema);
             }
 
-            if ((dataFomate & DataFomate.Binary) != 0)
+            if ((dataFormat & DataFormat.Binary) != 0)
             {
                 ExportBinaryData(sheet, schema);
             }
 
-            if ((dataFomate & DataFomate.LuaTable) != 0)
+            if ((dataFormat & DataFormat.LuaTable) != 0)
             {
                 ExportLuaTable(sheet, schema);
             }
 
-            if ((dataFomate & DataFomate.UnityScriptable) != 0)
+            if ((dataFormat & DataFormat.UnityScriptable) != 0)
             {
                 ExportUnityScriptable(sheet, schema);
             }
@@ -282,7 +282,7 @@ namespace TK.ExcelData
             string savePath = dataOutFolderPath;
             if (setting.dataUseSubPath)
             {
-                savePath = Path.Combine(savePath, DataFomate.Json.ToString());
+                savePath = Path.Combine(savePath, DataFormat.Json.ToString());
             }
             string outputFile = Path.Combine(savePath, schema.name + gen.exportExt);
             gen.Generate(sheet, schema,setting.headModel,side, outputFile);
@@ -293,7 +293,7 @@ namespace TK.ExcelData
             string savePath = dataOutFolderPath;
             if (setting.dataUseSubPath)
             {
-                savePath = Path.Combine(savePath, DataFomate.Xml.ToString());
+                savePath = Path.Combine(savePath, DataFormat.Xml.ToString());
             }
         }
 
@@ -302,7 +302,7 @@ namespace TK.ExcelData
             string savePath = dataOutFolderPath;
             if (setting.dataUseSubPath)
             {
-                savePath = Path.Combine(savePath, DataFomate.Binary.ToString());
+                savePath = Path.Combine(savePath, DataFormat.Binary.ToString());
             }
         }
 
@@ -311,7 +311,7 @@ namespace TK.ExcelData
             string savePath = dataOutFolderPath;
             if (setting.dataUseSubPath)
             {
-                savePath = Path.Combine(savePath, DataFomate.LuaTable.ToString());
+                savePath = Path.Combine(savePath, DataFormat.LuaTable.ToString());
             }
         }
 
@@ -320,7 +320,7 @@ namespace TK.ExcelData
             string savePath = dataOutFolderPath;
             if (setting.dataUseSubPath)
             {
-                savePath = Path.Combine(savePath, DataFomate.UnityScriptable.ToString());
+                savePath = Path.Combine(savePath, DataFormat.UnityScriptable.ToString());
             }
         }
 

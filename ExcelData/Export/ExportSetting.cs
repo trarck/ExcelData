@@ -10,8 +10,8 @@ namespace TK.ExcelData
         public delegate bool CheckSheetNeedExportHandle(ISheet sheet);
         public CheckSheetNeedExportHandle checkSheetNeedExportHandle;
 
-        public delegate string SheetExportNameFormateHandle(ISheet sheet);
-        public SheetExportNameFormateHandle sheetExportNameFomateHandle;
+        public delegate string SheetExportNameFormatHandle(ISheet sheet);
+        public SheetExportNameFormatHandle sheetExportNameFormatHandle;
 
         private bool m_CodeUseSubPath = false;
         public bool codeUseSubPath
@@ -43,15 +43,18 @@ namespace TK.ExcelData
         public HeadModel headModel
         {
             get { return m_HeadModel; }
-            set{ m_HeadModel = value; }
+            set { m_HeadModel = value; }
         }
 
-        private Dictionary<CodeFomate, string> m_CodeTemplates = new Dictionary<CodeFomate, string>
+        private string m_TemplateFolder= "ExcelData/CodeGen/Templates";
+        public string templateFolder{ get { return m_TemplateFolder; } set { m_TemplateFolder = value; } }
+
+        private Dictionary<CodeFomat, string> m_CodeTemplates = new Dictionary<CodeFomat, string>
         {
-            {CodeFomate.CSharp,"ExcelData/CodeGen/Templates/UnityCSharpClass.tt" },
-            {CodeFomate.Cpp,"ExcelData/CodeGen/Templates/CppClass.tt" },
-            {CodeFomate.Lua,"ExcelData/CodeGen/Templates/LuaClass.tt" },
-            {CodeFomate.Javascript,"ExcelData/CodeGen/Templates/JavascriptClass.tt" }
+            {CodeFomat.CSharp,"UnityCSharpClass.tt" },
+            {CodeFomat.Cpp,"CppClass.tt" },
+            {CodeFomat.Lua,"LuaClass.tt" },
+            {CodeFomat.Javascript,"JavascriptClass.tt" }
         };
 
         public bool ExportCheck(ISheet sheet)
@@ -63,31 +66,38 @@ namespace TK.ExcelData
             return ExcelHelper.NeedExport(sheet);
         }
 
-        public string FomateSheetName(ISheet sheet)
+        public string FormatSheetName(ISheet sheet)
         {
-            if (sheetExportNameFomateHandle != null)
+            if (sheetExportNameFormatHandle != null)
             {
-                return sheetExportNameFomateHandle(sheet);
+                return sheetExportNameFormatHandle(sheet);
             }
             return ExcelHelper.GetExportName(sheet);
         }
 
-        public void SetCodeTemplate(CodeFomate fomate,string templatePath)
+        public void SetCodeTemplate(CodeFomat format,string templatePath)
         {
-            m_CodeTemplates[fomate] = templatePath;
+            m_CodeTemplates[format] = templatePath;
         }
 
-        public string GetCodeTemplate(CodeFomate fomate)
+        public string GetCodeTemplate(CodeFomat format)
         {
             string templatePath = null;
-            if(m_CodeTemplates.TryGetValue(fomate,out templatePath))
+            if(m_CodeTemplates.TryGetValue(format,out templatePath))
             {
                 if (Path.IsPathRooted(templatePath))
                 {
                     return templatePath;
                 }
 
-                return Path.Combine(Directory.GetCurrentDirectory(), templatePath);
+                if (string.IsNullOrEmpty(templatePath))
+                {
+                    return Path.Combine(Directory.GetCurrentDirectory(), templatePath);
+                }
+                else
+                {
+                    return Path.Combine(templateFolder, templatePath);
+                }                
             }
             return null;
         }
