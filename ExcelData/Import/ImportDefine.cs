@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace TK.ExcelData
 {
-    public class ExportInfo
+    public class ImportInfo
     {
         public DateTime lastExport;
         public string md5;
     }
 
-    public enum ExportResult
+    public enum ImportResult
     {
         Success,
         NotExcelFile,
+        NotSheet,
         Error
     }
 }

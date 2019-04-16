@@ -259,10 +259,17 @@
     <Compile Include="CodeGen\TemplateGenerator.cs" />
     <Compile Include="DataSerializer\BinarySerializer.cs" />
     <Compile Include="DataSerializer\ISerializer.cs" />
+    <Compile Include="ExcelWriter\DataWriter.cs" />
+    <Compile Include="ExcelWriter\IDataWriter.cs" />
+    <Compile Include="ExcelWriter\WriteHelper.cs" />
+    <Compile Include="ExcelWriter\SchemaWriter.cs" />
     <Compile Include="ExcelReader\CellPosition.cs" />
     <Compile Include="Export\ExcelSerializer.cs" />
     <Compile Include="Export\ExportDefine.cs" />
     <Compile Include="HeadModel.cs" />
+    <Compile Include="Import\ExcelImport.cs" />
+    <Compile Include="Import\ImportSetting.cs" />
+    <Compile Include="Import\ImportDefine.cs" />
     <Compile Include="Side.cs" />
     <Compile Include="ExcelReader\IDataReader.cs" />
     <Compile Include="Export\ExportSetting.cs" />

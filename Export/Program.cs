@@ -23,7 +23,7 @@ namespace Export
 
             List<string> codeFormats = new List<string>();
             List<string> dataFormats = new List<string>();
-
+            
             optionSet = new OptionSet() {
                 { "excelDir=", "Excel folder path", s => excelDir = s },
                 { "codeOutDir=", "The code out folder", s => codeOutPath = s },

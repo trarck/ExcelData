@@ -14,12 +14,12 @@ namespace TK.ExcelData
 
             //first row is name
             IRow NameRow = sheet.GetRow(sheet.FirstRowNum + headModel.NameRow);
-            //third row is data type
+            //second row is data type
             IRow typeRow = sheet.GetRow(sheet.FirstRowNum + headModel.DataTypeRow);
 
             bool haveDescription = headModel.DescriptionRow != -1;
             bool haveSide = headModel.SideRow != -1;
-            //second row is description
+            //thirdrow is description
             IRow descriptionRow = null;
             if (haveDescription)
             {

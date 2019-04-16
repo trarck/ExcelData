@@ -88,6 +88,51 @@ namespace TK.ExcelData
             }
         }
 
+        public Type ToSystemType()
+        {
+            Type t = null;
+
+            switch (sign)
+            {
+                case Sign.Int:
+                    t = typeof(int);
+                    break;
+                case Sign.Long:
+                    t = typeof(long);
+                    break;
+                case Sign.Float:
+                    t = typeof(float);
+                    break;
+                case Sign.Double:
+                    t = typeof(double);
+                    break;
+                case Sign.String:
+                    t = typeof(string);
+                    break;
+                case Sign.Boolean:
+                    t = typeof(bool);
+                    break;
+                case Sign.Object:
+                    t = typeof(object);
+                    break;
+                case Sign.Generic:
+                    if (isGenericArray)
+                    {
+                        t = typeof(List<>);
+                        Type[] typeArgs = { _genericArguments[0].ToSystemType() };
+                        t = t.MakeGenericType(typeArgs);
+                    }
+                    else if (isGenericDictionary)
+                    {
+                        t = typeof(Dictionary<,>);
+                        Type[] typeArgs = { _genericArguments[0].ToSystemType(), _genericArguments[1].ToSystemType() };
+                        t = t.MakeGenericType(typeArgs);
+                    }
+                    break;
+            }
+            return t;
+        }
+
         public static TypeInfo Int = new TypeInfo("int",Sign.Int);
         public static TypeInfo Long = new TypeInfo("long",Sign.Long);
         public static TypeInfo Float = new TypeInfo("float",Sign.Float);
