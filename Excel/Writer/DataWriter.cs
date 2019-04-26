@@ -29,7 +29,11 @@ namespace TK.Excel
                     {
                         cell = row.CreateCell(col);
                     }
-                    WriteHelper.SetCellValue(cell, data[field.name], field.type);
+
+                    if (data.Contains(field.name))
+                    {
+                        WriteHelper.SetCellValue(cell, data[field.name], field.type);
+                    }
                 }
             }
         }
