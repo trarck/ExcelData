@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using TK.ExcelData;
+using TK.Excel;
 
 namespace Tests
 {

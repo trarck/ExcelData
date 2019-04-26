@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TK.ExcelData
+namespace TK.Excel
 {
     public static class ExtensionMethods
     {

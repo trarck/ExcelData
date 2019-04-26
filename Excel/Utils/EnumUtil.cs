@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TK.ExcelData
+namespace TK.Excel
 {
     public class EnumUtil
     {

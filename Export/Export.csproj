@@ -84,6 +84,10 @@
       <Project>{488bc83b-4b21-4030-a033-9e7f54af0de0}</Project>
       <Name>ExcelData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Excel\Excel.csproj">
+      <Project>{094ad15f-3fac-457c-9529-9e15137c5a9f}</Project>
+      <Name>Excel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

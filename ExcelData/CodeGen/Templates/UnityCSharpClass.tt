@@ -3,10 +3,11 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ import namespace="TK.ExcelData" #>
+<#@ import namespace="TK.Excel" #>
 <#@ output extension=".cs" #>
 <#@ parameter  name="ns" type="System.String" #>
-<#@ parameter  name="side" type="TK.ExcelData.Side" #>
-<#@ parameter  name="schema" type="TK.ExcelData.Schema" #>
+<#@ parameter  name="side" type="TK.Excel.Side" #>
+<#@ parameter  name="schema" type="TK.Excel.Schema" #>
 using UnityEngine;
 using System;
 using System.Collections;

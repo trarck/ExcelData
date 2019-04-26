@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using NPOI.SS.UserModel;
 
-namespace TK.ExcelData
+namespace TK.Excel
 {
     public class WriteHelper
     {

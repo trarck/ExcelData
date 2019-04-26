@@ -1,5 +1,5 @@
 ﻿
-namespace TK.ExcelData
+namespace TK.Excel
 {
     public class HeadModel
     {

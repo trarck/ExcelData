@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TK.ExcelData
+namespace TK.Excel
 {
 
     public class Schema

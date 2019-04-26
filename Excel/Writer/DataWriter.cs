@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NPOI.SS.UserModel;
 
-namespace TK.ExcelData
+namespace TK.Excel
 {
     public class DataWriter : IDataReader
     {
