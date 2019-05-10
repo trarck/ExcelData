@@ -66,6 +66,9 @@ namespace TK.Excel
             {
                 switch (dataType.sign)
                 {
+                    case TypeInfo.Sign.Byte:
+                        SetValue(cell, System.Convert.ToByte(data));
+                        break;
                     case TypeInfo.Sign.Int:
                         SetValue(cell, System.Convert.ToInt32(data));
                         break;

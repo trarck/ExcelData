@@ -9,6 +9,7 @@ namespace TK.Excel
         public enum Sign
         {
             Object,//未知
+            Byte,
             Int,
             Float,
             String,
@@ -94,6 +95,9 @@ namespace TK.Excel
 
             switch (sign)
             {
+                case Sign.Byte:
+                    t = typeof(byte);
+                    break;
                 case Sign.Int:
                     t = typeof(int);
                     break;
@@ -132,7 +136,8 @@ namespace TK.Excel
             }
             return t;
         }
-
+        
+        public static TypeInfo Byte = new TypeInfo("byte",Sign.Byte);
         public static TypeInfo Int = new TypeInfo("int",Sign.Int);
         public static TypeInfo Long = new TypeInfo("long",Sign.Long);
         public static TypeInfo Float = new TypeInfo("float",Sign.Float);
@@ -153,6 +158,9 @@ namespace TK.Excel
             //primitive type
             switch (type)
             {
+                case "byte":
+                case "Byte":
+                    return TypeInfo.Byte;
                 case "int":
                 case "Int":
                     return TypeInfo.Int;

@@ -15,6 +15,8 @@ namespace TK.Excel
         {
             switch (dataType.sign)
             {
+                case TypeInfo.Sign.Byte:
+                    return ReadHelper.GetIntValue(cell);
                 case TypeInfo.Sign.Int:
                     return ReadHelper.GetIntValue(cell);
                 case TypeInfo.Sign.Float:
@@ -257,6 +259,8 @@ namespace TK.Excel
         {
             switch (t.sign)
             {
+                case TypeInfo.Sign.Byte:
+                    return ReadList<byte>(sheet, colIndex, startRow, endRow, t);
                 case TypeInfo.Sign.Int:
                     return ReadList<int>(sheet, colIndex, startRow, endRow, t);
                 case TypeInfo.Sign.Float:
