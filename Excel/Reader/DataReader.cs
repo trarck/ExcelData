@@ -112,7 +112,7 @@ namespace TK.Excel
 
         #region row
 
-        Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields)
+        public Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields)
         {
             if (headerFields == null || headerFields.Count == 0) return null;
 

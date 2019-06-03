@@ -14,7 +14,7 @@ namespace TK.Excel
         public Side side { get { return m_Side; } set { m_Side = value; } }
         
         #region row
-        void WriteRowDictionary(IRow row,  List<Field> headerFields, IDictionary data, int colStart = 0)
+        public void WriteRowDictionary(IRow row,  List<Field> headerFields, IDictionary data, int colStart = 0)
         {
             Field field;
             for (int i = 0, l = headerFields.Count; i < l; ++i)
