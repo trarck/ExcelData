@@ -91,7 +91,7 @@ namespace TK.Excel
                         cell = row.CreateCell(col);
                     }
 
-                    MemberInfo[] memberInfos= dataType.GetMember(field.name, BindingFlags.Public| BindingFlags.NonPublic);
+                    MemberInfo[] memberInfos= dataType.GetMember(field.name);
                     if(memberInfos!=null && memberInfos.Length > 0)
                     {
                         WriteHelper.SetCellValue(cell, GetValue(memberInfos[0],data), field.type);
