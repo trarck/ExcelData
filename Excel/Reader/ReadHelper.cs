@@ -41,13 +41,14 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return (int)cell.NumericCellValue;
                     case CellType.String:
                         return int.Parse(cell.StringCellValue);
                     case CellType.Boolean:
                         return cell.BooleanCellValue ? 1 : 0;
                     default:
-                        throw new System.Exception("can't convert to int from " + cell.CellType);
+                        return int.Parse(cell.StringCellValue);
                 }
             }
             else
@@ -63,9 +64,12 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return (long)cell.NumericCellValue;
                     case CellType.String:
                         return long.Parse(cell.StringCellValue);
+                    case CellType.Boolean:
+                        return cell.BooleanCellValue ? 1 : 0;
                     default:
                         throw new System.Exception("can't convert to long from " + cell.CellType);
                 }
@@ -83,6 +87,7 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return (float)cell.NumericCellValue;
                     case CellType.String:
                         return float.Parse(cell.StringCellValue);
@@ -103,6 +108,7 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return cell.NumericCellValue;
                     case CellType.String:
                         return double.Parse(cell.StringCellValue);
@@ -123,6 +129,7 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return cell.NumericCellValue != 0;
                     case CellType.String:
                         return bool.Parse(cell.StringCellValue);
@@ -145,6 +152,7 @@ namespace TK.Excel
                 switch (cell.CellType)
                 {
                     case CellType.Numeric:
+                    case CellType.Formula:
                         return cell.NumericCellValue.ToString();
                     case CellType.Boolean:
                         return cell.BooleanCellValue.ToString();

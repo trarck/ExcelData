@@ -106,6 +106,8 @@ namespace TK.ExcelData
 
         public ExportResult Export(string excelFilePath)
         {
+            Console.WriteLine("export excel "+excelFilePath);
+
             IWorkbook workbook = ExcelHelper.Load(excelFilePath);
             if (workbook != null)
             {

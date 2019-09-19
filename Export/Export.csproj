@@ -88,6 +88,10 @@
       <Project>{094ad15f-3fac-457c-9529-9e15137c5a9f}</Project>
       <Name>Excel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Log\Log.csproj">
+      <Project>{1ca79ce1-b5a7-48c6-ae97-62989876e9b7}</Project>
+      <Name>Log</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Import", "Import\Import.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "Excel\Excel.csproj", "{094AD15F-3FAC-457C-9529-9E15137C5A9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Log", "Log\Log.csproj", "{1CA79CE1-B5A7-48C6-AE97-62989876E9B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{094AD15F-3FAC-457C-9529-9E15137C5A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{094AD15F-3FAC-457C-9529-9E15137C5A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{094AD15F-3FAC-457C-9529-9E15137C5A9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CA79CE1-B5A7-48C6-AE97-62989876E9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CA79CE1-B5A7-48C6-AE97-62989876E9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CA79CE1-B5A7-48C6-AE97-62989876E9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CA79CE1-B5A7-48C6-AE97-62989876E9B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

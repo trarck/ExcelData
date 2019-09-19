@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TK.ExcelData;
 using TK.Options;
 using TK.Excel;
+using Log;
 
 namespace Export
 {
@@ -124,6 +125,7 @@ namespace Export
             export.dataFormat = dataFormat;
 
             export.exportInfoFile = exportInfo;
+            Console.WriteLine("Start exporting.......");
             export.Start();
         }
     }
