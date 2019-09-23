@@ -62,7 +62,7 @@ namespace TK.Excel
             else
             {
                 //as json data
-                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue, type.ToSystemType());
             }
         }
 
@@ -87,7 +87,7 @@ namespace TK.Excel
                 if (cell != null)
                 {
                     //as json data
-                    return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue,type.ToSystemType());
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace TK.Excel
             else
             {
                 //as json data
-                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue);
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(cell.StringCellValue, type.ToSystemType());
             }
         }
         #endregion
