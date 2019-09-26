@@ -31,6 +31,26 @@ namespace TK.Excel
             return workbook;
         }
 
+        public static IWorkbook Load(Stream stream,bool newExcel=true)
+        {
+            IWorkbook workbook = null;
+
+            if (stream!=null)
+            {
+                //stream will close by workbook
+
+                if (newExcel)// 新版
+                {
+                    workbook = new XSSFWorkbook(stream);
+                }
+                else 
+                {
+                    workbook = new HSSFWorkbook(stream);
+                }
+            }
+            return workbook;
+        }
+
         public static void Save(string fileName, IWorkbook workbook)
         {
             string ext = Path.GetExtension(fileName);

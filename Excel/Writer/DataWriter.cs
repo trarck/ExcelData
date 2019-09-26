@@ -6,7 +6,7 @@ using NPOI.SS.UserModel;
 
 namespace TK.Excel
 {
-    public class DataWriter : IDataReader
+    public class DataWriter : IDataWriter
     {
         public HeadModel headModel { get; set; }
 

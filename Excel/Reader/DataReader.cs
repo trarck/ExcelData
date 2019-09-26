@@ -199,17 +199,17 @@ namespace TK.Excel
 
         #region dictionary
 
-        public Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, HeadModel headModel)
+        public IDictionary ReadDictionary(ISheet sheet, Schema schema, HeadModel headModel)
         {
             return ReadDictionary(sheet, schema, "", headModel.DataRow, 0, -1, null);
         }
 
-        public Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, HeadModel headModel)
+        public IDictionary ReadDictionary(ISheet sheet, Schema schema, string keyField, HeadModel headModel)
         {
             return ReadDictionary(sheet, schema, keyField, headModel.DataRow, 0, -1, null);
         }
 
-        public Dictionary<string, object> ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStart, int colStart, int colEnd, List<string> header, bool removeKeyInElement = false, int dataEnd = -1)
+        public IDictionary ReadDictionary(ISheet sheet, Schema schema, string keyField, int dataStart, int colStart, int colEnd, List<string> header, bool removeKeyInElement = false, int dataEnd = -1)
         {
 
             if (header == null || header.Count == 0)
@@ -225,12 +225,12 @@ namespace TK.Excel
                 keyField = header[0];
             }
 
-            Dictionary<string, object> dict = new Dictionary<string, object>();
+            Dictionary<object, object> dict = new Dictionary<object, object>();
             int l = dataEnd <= 0 ? sheet.LastRowNum : (dataEnd < sheet.LastRowNum ? dataEnd : sheet.LastRowNum);
             for (int i = sheet.FirstRowNum + dataStart; i <= l; ++i)
             {
                 Dictionary<string, object> record = ReadRowData(sheet.GetRow(i), headerFields, colStart, colEnd);
-                string key = record[keyField].ToString();
+                object key = record[keyField];
                 dict[key] = record;
                 if (removeKeyInElement)
                 {
