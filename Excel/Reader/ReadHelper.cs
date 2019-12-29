@@ -48,7 +48,9 @@ namespace TK.Excel
                     case CellType.Boolean:
                         return cell.BooleanCellValue ? 1 : 0;
                     default:
-                        return int.Parse(cell.StringCellValue);
+                        int v;
+                        int.TryParse(cell.StringCellValue, out v);
+                        return v;
                 }
             }
             else
@@ -71,7 +73,9 @@ namespace TK.Excel
                     case CellType.Boolean:
                         return cell.BooleanCellValue ? 1 : 0;
                     default:
-                        throw new System.Exception("can't convert to long from " + cell.CellType);
+                        long v;
+                        long.TryParse(cell.StringCellValue, out v);
+                        return v;
                 }
             }
             else
@@ -92,7 +96,9 @@ namespace TK.Excel
                     case CellType.String:
                         return float.Parse(cell.StringCellValue);
                     default:
-                        throw new System.Exception("can't convert to float from " + cell.CellType);
+                        float v;
+                        float.TryParse(cell.StringCellValue, out v);
+                        return v;
                 }
             }
             else
@@ -113,7 +119,9 @@ namespace TK.Excel
                     case CellType.String:
                         return double.Parse(cell.StringCellValue);
                     default:
-                        throw new System.Exception("can't convert to double from " + cell.CellType);
+                        double v;
+                        double.TryParse(cell.StringCellValue, out v);
+                        return v;
                 }
             }
             else
@@ -136,7 +144,9 @@ namespace TK.Excel
                     case CellType.Boolean:
                         return cell.BooleanCellValue;
                     default:
-                        throw new System.Exception("can't convert to bool from " + cell.CellType);
+                        bool v;
+                        bool.TryParse(cell.StringCellValue, out v);
+                        return v;
                 }
             }
             else

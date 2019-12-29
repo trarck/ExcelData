@@ -114,25 +114,7 @@ namespace TK.Excel
 
         public Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields)
         {
-            if (headerFields == null || headerFields.Count == 0) return null;
-
-            Dictionary<string, object> data = new Dictionary<string, object>();
-            IEnumerator<ICell> iter = row.GetEnumerator();
-            int index = 0;
-
-            Field field;
-
-            while (iter.MoveNext() && index < headerFields.Count)
-            {
-                field = headerFields[index];
-                if (field.IsSameSide(side))
-                {
-                    data[field.name] = GetCellValue(iter.Current, field.type);
-                }
-                ++index;
-            }
-
-            return data;
+            return ReadRowData(row, headerFields, 0);
         }
 
         Dictionary<string, object> ReadRowData(IRow row, List<Field> headerFields, int colStart, int colEnd = -1)
