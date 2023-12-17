@@ -2,7 +2,6 @@
 
 namespace TK.Excel
 {
-
     public class Schema
     {
         string m_Name;

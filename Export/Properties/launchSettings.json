@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Export": {
+      "commandName": "Project",
+      "commandLineArgs": "--excelDir=D:\\Projects\\ExcelData\\Tests\\Data --codeOutDir=.\\Code --dataOutPath=.\\Data --codeFormat=CSharp --dataFormat=Json --size=Client --headModel=Normal"
+    }
+  }
+}

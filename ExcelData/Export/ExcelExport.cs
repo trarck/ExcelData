@@ -156,73 +156,51 @@ namespace TK.ExcelData
         /// <param name="schema"></param>
         private void GenerateCode(Schema schema)
         {
-            ClassCodeGen codeGen = new ClassCodeGen();
-            codeGen.Init();
-            codeGen.AddSession("ns", codeNamespace);
-            codeGen.AddSession("side", side);
-            codeGen.AddSession("schema", schema);
-
             if ((codeFormat & CodeFomat.CSharp)!=0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.CSharp);
-                string outFile = null;
-                if (setting.codeUseSubPath)
-                {
-                    outFile = Path.Combine(codeOutFolderPath,CodeFomat.CSharp.ToString(), schema.name + ".cs");
-                }
-                else
-                {
-                    outFile = Path.Combine(codeOutFolderPath, schema.name + ".cs");
-                }
-                
-
-                codeGen.Generate(outFile);
+                GenerateCodeUseTemplate(schema, CodeFomat.CSharp);
             }
 
             if ((codeFormat & CodeFomat.Cpp) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Cpp);
-                string outFile = null;
-                if (setting.codeUseSubPath)
-                {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Cpp.ToString(), schema.name + ".cpp");
-                }
-                else
-                {
-                    outFile = Path.Combine(codeOutFolderPath, schema.name + ".cpp");
-                }
-                codeGen.Generate(outFile);
+                GenerateCodeUseTemplate(schema, CodeFomat.Cpp);
             }
 
             if ((codeFormat & CodeFomat.Lua) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Lua);
-                string outFile = null;
-                if (setting.codeUseSubPath)
-                {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Lua.ToString(), schema.name + ".lua");
-                }
-                else
-                {
-                    outFile = Path.Combine(codeOutFolderPath, schema.name + ".lua");
-                }
-                codeGen.Generate(outFile);
+                GenerateCodeUseTemplate(schema, CodeFomat.Lua);
             }
 
             if ((codeFormat & CodeFomat.Javascript) != 0)
             {
-                codeGen.inputFile = setting.GetCodeTemplate(CodeFomat.Javascript);
-                string outFile = null;
-                if (setting.codeUseSubPath)
-                {
-                    outFile = Path.Combine(codeOutFolderPath, CodeFomat.Javascript.ToString(), schema.name + ".js");
-                }
-                else
-                {
-                    outFile = Path.Combine(codeOutFolderPath, schema.name + ".js");
-                }
-                codeGen.Generate(outFile);
+                GenerateCodeUseTemplate(schema, CodeFomat.Javascript);
             }
+        }
+
+        private void GenerateCodeUseTemplate(Schema schema, CodeFomat codeFomat)
+        {
+            CodeGenTemplate genTemplate = setting.GetCodeTemplate(codeFomat);
+            genTemplate.ns = codeNamespace;
+            genTemplate.side = side;
+
+            string outFile = null;
+            string fileExt = setting.GetGenerateCodeFileExt(codeFomat);
+            if (setting.codeUseSubPath)
+            {
+                outFile = Path.Combine(codeOutFolderPath, CodeFomat.CSharp.ToString(), schema.name + fileExt);
+            }
+            else
+            {
+                outFile = Path.Combine(codeOutFolderPath, schema.name + fileExt);
+            }
+
+            string outDir = Path.GetDirectoryName(outFile);
+            if (!Directory.Exists(outDir))
+            {
+                Directory.CreateDirectory(outDir);
+            }
+
+            genTemplate.Generate(outFile, schema);
         }
 
         public void ExportData(ISheet sheet,Schema schema)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace TK.Excel
 {
-    
     public class TypeInfo
     {
         public enum Sign

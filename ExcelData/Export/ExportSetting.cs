@@ -46,15 +46,20 @@ namespace TK.ExcelData
             set { m_HeadModel = value; }
         }
 
-        private string m_TemplateFolder= "ExcelData/CodeGen/Templates";
-        public string templateFolder{ get { return m_TemplateFolder; } set { m_TemplateFolder = value; } }
-
-        private Dictionary<CodeFomat, string> m_CodeTemplates = new Dictionary<CodeFomat, string>
+        private Dictionary<CodeFomat, CodeGenTemplate> m_CodeTemplates = new Dictionary<CodeFomat, CodeGenTemplate>
         {
-            {CodeFomat.CSharp,"UnityCSharpClass.tt" },
-            {CodeFomat.Cpp,"CppClass.tt" },
-            {CodeFomat.Lua,"LuaClass.tt" },
-            {CodeFomat.Javascript,"JavascriptClass.tt" }
+            {CodeFomat.CSharp, new CodeGenTemplateCSharp() },
+            {CodeFomat.Cpp, new CodeGenTemplate() },
+            {CodeFomat.Lua,new CodeGenTemplate() },
+            {CodeFomat.Javascript,new CodeGenTemplate() }
+        };
+
+        private Dictionary<CodeFomat, string> m_GenCodeFileExts = new Dictionary<CodeFomat, string>
+        {
+            {CodeFomat.CSharp, ".cs"},
+            {CodeFomat.Cpp, ".cpp" },
+            {CodeFomat.Lua,".lua" },
+            {CodeFomat.Javascript,".js" }
         };
 
         public bool ExportCheck(ISheet sheet)
@@ -75,31 +80,23 @@ namespace TK.ExcelData
             return ExcelHelper.GetExportName(sheet);
         }
 
-        public void SetCodeTemplate(CodeFomat format,string templatePath)
+        public void SetCodeTemplate(CodeFomat format, CodeGenTemplate templatePath)
         {
             m_CodeTemplates[format] = templatePath;
         }
 
-        public string GetCodeTemplate(CodeFomat format)
+        public CodeGenTemplate GetCodeTemplate(CodeFomat format)
         {
-            string templatePath = null;
-            if(m_CodeTemplates.TryGetValue(format,out templatePath))
-            {
-                if (Path.IsPathRooted(templatePath))
-                {
-                    return templatePath;
-                }
+            CodeGenTemplate genTemplate = null;
+            m_CodeTemplates.TryGetValue(format, out genTemplate);
+            return genTemplate;
+        }
 
-                if (string.IsNullOrEmpty(templatePath))
-                {
-                    return Path.Combine(Directory.GetCurrentDirectory(), templatePath);
-                }
-                else
-                {
-                    return Path.Combine(templateFolder, templatePath);
-                }                
-            }
-            return null;
+        public string GetGenerateCodeFileExt(CodeFomat format)
+        {
+            string ext = null;
+            m_GenCodeFileExts.TryGetValue(format, out ext);
+            return ext;
         }
     }
 }

@@ -5,21 +5,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-  
-  <!-- Conditionally obtain references for the .NET Framework 4.0 target -->
-  <!-- <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System.Net" />
-  </ItemGroup> -->
-
-  <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
-  <!--<ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Threading.Tasks" />
-  </ItemGroup> -->
   <ItemGroup>
-     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\Libs\Newtonsoft.Json\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\NPOI\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="NPOI, Version=2.3.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -37,5 +30,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\NPOI\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Excel\Excel.csproj"/>
   </ItemGroup>
 </Project>

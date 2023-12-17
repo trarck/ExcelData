@@ -21,7 +21,6 @@ namespace Export
             string exportInfo = null;
             Side side = Side.All;
             string headModel = null;
-            string templateFolder = null;
 
             List<string> codeFormats = new List<string>();
             List<string> dataFormats = new List<string>();
@@ -35,8 +34,7 @@ namespace Export
                 { "dataFormat=", "Aata type [Json,Xml,Binary,LuaTable,UnityScriptable]", s => dataFormats.Add (s) },
                 { "exportInfo=", "The last export info.", s => exportInfo=s },
                 { "side=", "The last export info.", s => side=(Side)Enum.Parse(typeof(Side),s) },
-                { "headModel=", "The last export info.", s => headModel=s },
-                { "templatePath=", "The last export info.", s => templateFolder=s }
+                { "headModel=", "The last export info.Normal|Simple|Full", s => headModel=s }
             };
 
             optionSet.Parse(args);
@@ -91,15 +89,10 @@ namespace Export
                     case "Simple":
                         setting.headModel = HeadModel.CreateSimpleModel();
                         break;
-                    default://All
+                    default://Full
                         //use default have side
                         break;
                 }
-            }
-
-            if (!string.IsNullOrEmpty(templateFolder))
-            {
-                setting.templateFolder = templateFolder;
             }
 
             ExcelExport export = new ExcelExport(setting);

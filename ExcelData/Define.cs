@@ -13,10 +13,11 @@ namespace TK.ExcelData
     public enum DataFormat
     {
         None = 0,
-        Json = 1,
-        Xml = 2,
-        Binary = 4,
-        LuaTable = 8,
-        UnityScriptable = 16
+        Binary = 1,
+        csv = 2,
+        Json = 4,
+        Xml = 8,
+        LuaTable = 16,
+        UnityScriptable = 32
     }
 }
